@@ -1,7 +1,6 @@
 # Forum Maintenance Mode
 
-Estensione phpBB 3.3 che sostituisce il forum con una pagina di manutenzione a schermo intero,
-configurabile dall'ACP.
+Estensione phpBB 3.3 che sostituisce il forum con una pagina di manutenzione a schermo intero, configurabile dall'ACP.
 
 *Read this in [English](README.en.md).*
 
@@ -11,7 +10,7 @@ configurabile dall'ACP.
 | **Copyright** | (c) 2026-08-11 20:00 CEST Salvo Cortesiano |
 | **Forum** | https://netshadows.de/ombra/ |
 | **Licenza** | GNU General Public License, version 2 (GPL-2.0) |
-| **Versione** | 1.4.0 |
+| **Versione** | 1.5.2 |
 
 ## Installazione
 
@@ -59,12 +58,41 @@ il campione sceglie il colore, il cursore la trasparenza, e il campo di testo si
 formato esadecimale a 8 cifre. Il pulsante **Colori predefiniti** riporta tutti gli undici campi
 ai valori originari; ricordati di salvare per applicare.
 
+## Avviso preventivo a tutti gli utenti
+
+Con la spunta **Abilitare messaggio visivo a tutti gli utenti?** un avviso compare in cima a
+tutte le pagine del forum *prima* che la manutenzione inizi, per esempio:
+
+> Si avvisa tutti gli utenti ed i releaser che dal 13/08/2026 06:00 al 13/08/2026 08:00 vi sarà
+> un intervento di manutenzione straordinaria del forum. Grazie per la pazienza.
+
+Date e ore vengono dai campi **Periodo di manutenzione** dell'ACP e sono mostrate nel fuso di chi
+legge. Il testo è modificabile in italiano e in inglese nella sezione Messaggi, con i segnaposto
+`{START}`, `{END}` e `{SITENAME}`.
+
+Le date e le ore dell'avviso sono mostrate nel **fuso orario di chi legge**, ricavate dal momento
+esatto salvato in ACP: così l'orario che scrivi nel pannello è lo stesso che vede l'utente, senza
+scarti dovuti al fuso impostato sul tuo account.
+
+L'avviso richiede la programmazione con data di inizio e di fine, e sparisce da solo quando la
+manutenzione comincia, perché da quel momento i visitatori vedono la pagina a schermo intero. Con
+**Giorni di anticipo** puoi mostrarlo solo negli ultimi giorni prima dell'intervento; 0 significa
+sempre. Nel pannello, quando l'avviso è attivo, vedi il testo esatto che gli utenti stanno leggendo.
+
 ## Sincronia con "Disabilita forum" di phpBB
 
 L'opzione **Disattiva anche il forum di phpBB** (attiva di serie) mette a *Sì* la voce
 *Disabilita forum* in ACP → Generale → Impostazioni board mentre la manutenzione è in corso, e la
 riporta al valore precedente quando finisce. Doppia protezione: se per qualsiasi motivo
 l'estensione non intercettasse una pagina, interviene il blocco nativo di phpBB.
+
+L'estensione neutralizza il blocco nativo di phpBB mentre la manutenzione è in corso (usando la
+costante `SKIP_CHECK_DISABLED` prevista da phpBB stesso), altrimenti i visitatori riceverebbero il
+messaggio standard "La Board è momentaneamente disattivata" al posto della pagina personalizzata:
+nel `user::setup()` di phpBB quel controllo scatta subito dopo l'evento su cui l'estensione lavora.
+
+Se per qualsiasi motivo il forum restasse chiuso senza manutenzione in corso, il pannello lo
+segnala in rosso e offre il pulsante **Riapri subito il forum**.
 
 ## Accesso durante la manutenzione
 

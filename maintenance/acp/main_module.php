@@ -51,6 +51,16 @@ class main_module
 				$errors[] = $language->lang('FORM_INVALID');
 			}
 
+			// Reopen the board when it was left closed outside maintenance
+			if (empty($errors) && $request->is_set_post('agm_reopen'))
+			{
+				$config->set('board_disable', 0);
+				$config->set('agm_prev_board_disable', 0);
+				$config->set('agm_board_governed', 0);
+
+				trigger_error($language->lang('AGM_BOARD_REOPENED') . adm_back_link($this->u_action));
+			}
+
 			// Quick on/off button
 			if (empty($errors) && $request->is_set_post('agm_toggle'))
 			{
@@ -130,6 +140,8 @@ class main_module
 					$config->set('agm_enabled', $now_enabled ? 1 : 0);
 				}
 
+				$config->set('agm_notice', (int) $request->variable('agm_notice', 0));
+				$config->set('agm_notice_days', max(0, min(365, (int) $request->variable('agm_notice_days', 0))));
 				$config->set('agm_use_schedule', (int) $request->variable('agm_use_schedule', 0));
 				$config->set('agm_auto_off', (int) $request->variable('agm_auto_off', 0));
 				$config->set('agm_start', (int) $start);
@@ -176,6 +188,7 @@ class main_module
 			}
 		}
 
+		$notice_preview = $agm->get_notice();
 		$colors = $agm->get_colors();
 		$messages = $agm->get_messages();
 		$start = $agm->get_start();
@@ -189,11 +202,15 @@ class main_module
 
 			'AGM_IS_ENABLED'	=> $agm->is_enabled(),
 			'AGM_IS_ACTIVE'		=> $agm->is_active(),
+			'AGM_NOTICE_ON'		=> !empty($config['agm_notice']),
+			'AGM_NOTICE_DAYS'	=> (int) $config['agm_notice_days'],
+			'AGM_NOTICE_PREVIEW' => isset($notice_preview['text']) ? $notice_preview['text'] : '',
 			'AGM_USE_SCHEDULE'	=> !empty($config['agm_use_schedule']),
 			'AGM_AUTO_OFF'		=> !empty($config['agm_auto_off']),
 			'AGM_SYNC_BOARD'	=> !empty($config['agm_sync_board_disable']),
 			'AGM_SHOW_TO_ADMINS' => !empty($config['agm_show_to_admins']),
 			'AGM_BOARD_DISABLED' => !empty($config['board_disable']),
+			'AGM_BOARD_STUCK'	=> (!empty($config['board_disable']) && !$agm->is_active()),
 
 			'AGM_START_TS'		=> $start,
 			'AGM_END_TS'		=> $end,
@@ -244,10 +261,12 @@ class main_module
 			'AGM_IT_SUBTITLE'		=> $messages['it']['subtitle'],
 			'AGM_IT_DESCRIPTION'	=> $messages['it']['description'],
 			'AGM_IT_FOOTER'			=> $messages['it']['footer'],
+			'AGM_IT_NOTICE'			=> $messages['it']['notice'],
 			'AGM_EN_TITLE'			=> $messages['en']['title'],
 			'AGM_EN_SUBTITLE'		=> $messages['en']['subtitle'],
 			'AGM_EN_DESCRIPTION'	=> $messages['en']['description'],
 			'AGM_EN_FOOTER'			=> $messages['en']['footer'],
+			'AGM_EN_NOTICE'			=> $messages['en']['notice'],
 
 			'AGM_LAST_ON'		=> !empty($config['agm_last_on']) ? $user->format_date((int) $config['agm_last_on']) : $language->lang('AGM_NOT_AVAILABLE'),
 			'AGM_LAST_OFF'		=> !empty($config['agm_last_off']) ? $user->format_date((int) $config['agm_last_off']) : $language->lang('AGM_NOT_AVAILABLE'),

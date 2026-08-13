@@ -42,8 +42,41 @@ class main_listener implements EventSubscriberInterface
 		return array(
 			'core.user_setup_after'	=> 'check_maintenance',
 			'core.page_header'		=> 'check_maintenance',
+			'core.page_header_after'	=> 'assign_notice',
 			'core.permissions'		=> 'add_permission',
 		);
+	}
+
+	/**
+	 * Put the advance notice on every board page.
+	 *
+	 * This runs on pages the visitor is allowed to see, so it never competes
+	 * with the maintenance page itself: while maintenance is running the
+	 * request never gets this far for ordinary visitors.
+	 */
+	public function assign_notice()
+	{
+		if (defined('ADMIN_START') || defined('IN_ADMIN') || defined('IN_INSTALL'))
+		{
+			return;
+		}
+
+		// Belt and braces: the banners are a convenience, never a reason to
+		// take the board down. Any failure in here is swallowed so the page
+		// still renders.
+		try
+		{
+			$this->helper->assign_notice();
+			$this->helper->assign_admin_banner();
+		}
+		catch (\Exception $e)
+		{
+			// nothing to do: the page is served without the banner
+		}
+		catch (\Throwable $e)
+		{
+			// PHP 7 fatals that can be caught, same treatment
+		}
 	}
 
 	/**
@@ -87,6 +120,16 @@ class main_listener implements EventSubscriberInterface
 		if (!$active)
 		{
 			return;
+		}
+
+		// user::setup() checks board_disable right after firing the event we
+		// are on, and answers with phpBB's own plain notice. Since we close the
+		// board ourselves, that check has to be skipped: everyone who is not
+		// allowed through gets our page below instead, and those who are
+		// allowed through keep browsing normally.
+		if (!defined('SKIP_CHECK_DISABLED'))
+		{
+			define('SKIP_CHECK_DISABLED', true);
 		}
 
 		// Administrators and founders keep access unless the admin asked to be

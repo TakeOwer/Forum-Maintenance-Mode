@@ -74,12 +74,14 @@ class helper
 				'subtitle'    => 'Stiamo lavorando per migliorare il sito',
 				'description' => 'Il sito è temporaneamente non disponibile per manutenzione programmata. Torneremo presto online.',
 				'footer'      => 'Torneremo presto online!',
+				'notice'      => 'Si avvisa tutti gli utenti ed i releaser che dal {START} al {END} vi sarà un intervento di manutenzione straordinaria del forum. Grazie per la pazienza.',
 			),
 			'en' => array(
 				'title'       => 'Site under maintenance',
 				'subtitle'    => 'We are working to improve the site',
 				'description' => 'The site is temporarily unavailable due to scheduled maintenance. We will be back online shortly.',
 				'footer'      => 'We will be back online soon!',
+				'notice'      => 'All users and releasers are advised that the board will undergo extraordinary maintenance from {START} to {END}. Thank you for your patience.',
 			),
 		);
 	}
@@ -104,6 +106,7 @@ class helper
 				'u_m'         => 'm',
 				'u_s'         => 's',
 				'preview'     => 'Anteprima',
+				'admin_banner' => 'Manutenzione ATTIVA: gli utenti stanno vedendo la pagina di manutenzione. Tu vedi il forum normale perché sei amministratore. Per vedere la pagina come la vedono loro apri il forum in una finestra anonima, oppure attiva "Mostra la pagina anche agli amministratori" nel pannello.',
 			),
 			'en' => array(
 				'contact'     => 'For urgent enquiries, contact us:',
@@ -119,6 +122,7 @@ class helper
 				'u_m'         => 'm',
 				'u_s'         => 's',
 				'preview'     => 'Preview',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
 			),
 		);
 	}
@@ -214,6 +218,134 @@ class helper
 	}
 
 	/**
+	 * Should the advance notice be shown right now?
+	 *
+	 * It only makes sense with a schedule: the switch must be on, a start and
+	 * an end date must be set, and the window must not have begun yet. Once
+	 * maintenance is running the visitor sees the full page instead.
+	 *
+	 * @return array empty when nothing should be shown
+	 */
+	public function get_notice()
+	{
+		if (empty($this->config['agm_notice']) || !$this->is_enabled() || empty($this->config['agm_use_schedule']))
+		{
+			return array();
+		}
+
+		$start = $this->get_start();
+		$end   = $this->get_end();
+		$now   = time();
+
+		if (!$start || !$end || $now >= $start)
+		{
+			return array();
+		}
+
+		// Optional lead time: show it only in the days before the window
+		$days = (int) $this->config['agm_notice_days'];
+
+		if ($days > 0 && $start - $now > $days * 86400)
+		{
+			return array();
+		}
+
+		$messages = $this->get_messages();
+		$lang     = $this->current_lang();
+		$template = isset($messages[$lang]['notice']) ? $messages[$lang]['notice'] : '';
+
+		if (trim($template) === '')
+		{
+			return array();
+		}
+
+		return array(
+			'template' => str_replace('{SITENAME}', (string) $this->config['sitename'], $template),
+			'start'    => $start,
+			'end'      => $end,
+		);
+	}
+
+	/**
+	 * Put the advance notice on the current page.
+	 *
+	 * The text is split around the {START} and {END} placeholders and passed as
+	 * template blocks. Each date carries its UNIX timestamp so the browser can
+	 * print it in the reader's own timezone, exactly like the countdown card
+	 * does: formatting it here would use the account timezone instead, which is
+	 * what made the times look shifted.
+	 */
+	public function assign_notice()
+	{
+		$notice = $this->get_notice();
+
+		if (empty($notice))
+		{
+			return;
+		}
+
+		$parts = preg_split('/(\{START\}|\{END\})/', $notice['template'], -1, PREG_SPLIT_DELIM_CAPTURE);
+
+		foreach ($parts as $part)
+		{
+			if ($part === '')
+			{
+				continue;
+			}
+
+			if ($part === '{START}' || $part === '{END}')
+			{
+				$stamp = ($part === '{START}') ? $notice['start'] : $notice['end'];
+
+				$this->template->assign_block_vars('agm_notice_part', array(
+					'TEXT' => $this->user->format_date($stamp, 'd/m/Y H:i'),
+					'TS'   => $stamp,
+				));
+			}
+			else
+			{
+				$this->template->assign_block_vars('agm_notice_part', array(
+					'TEXT' => $part,
+					'TS'   => 0,
+				));
+			}
+		}
+
+		$this->template->assign_var('S_AGM_NOTICE', true);
+	}
+
+	/**
+	 * Tell an administrator why they are looking at the ordinary board while
+	 * maintenance is running.
+	 *
+	 * phpBB shows its own red "board disabled" line to admins, which reads like
+	 * a fault; this says plainly that the extension is working and that other
+	 * visitors are getting the maintenance page.
+	 */
+	public function assign_admin_banner()
+	{
+		if (!$this->is_active() || $this->show_to_admins())
+		{
+			return;
+		}
+
+		if (!$this->auth->acl_get('a_') && (!isset($this->user->data['user_type']) || (int) $this->user->data['user_type'] !== USER_FOUNDER))
+		{
+			return;
+		}
+
+		$strings = self::ui_strings();
+		$lang    = $this->current_lang();
+
+		$this->template->assign_vars(array(
+			'S_AGM_ADMIN_BANNER' => true,
+			'AGM_ADMIN_BANNER'   => isset($strings[$lang]['admin_banner'])
+				? $strings[$lang]['admin_banner']
+				: $strings['en']['admin_banner'],
+		));
+	}
+
+	/**
 	 * Is the maintenance page to be shown right now?
 	 *
 	 * The switch must be on and, when a schedule is set, the current time must
@@ -263,12 +395,9 @@ class helper
 		$this->config->set('agm_last_on', time());
 		$this->config->increment('agm_total_activations', 1);
 
-		// Mirror the switch onto phpBB's own "Disable board" setting
-		if (!empty($this->config['agm_sync_board_disable']))
-		{
-			$this->config->set('agm_prev_board_disable', (int) $this->config['board_disable']);
-			$this->config->set('board_disable', 1);
-		}
+		// Do not touch phpBB's switch here: sync_board_disable() follows the
+		// real state, so a window scheduled for later leaves the board open.
+		$this->sync_board_disable($this->is_active());
 	}
 
 	public function deactivate()
@@ -276,16 +405,18 @@ class helper
 		$this->config->set('agm_enabled', 0);
 		$this->config->set('agm_last_off', time());
 
-		if (!empty($this->config['agm_sync_board_disable']))
-		{
-			$this->config->set('board_disable', (int) $this->config['agm_prev_board_disable']);
-		}
+		$this->sync_board_disable(false);
 	}
 
 	/**
 	 * Keep phpBB's own "Disable board" setting in step with whether the
-	 * maintenance page is actually showing, not just with the switch: a
-	 * scheduled window that has not started yet must leave the board open.
+	 * maintenance page is actually showing.
+	 *
+	 * A "governed" flag records whether the board was closed by us. The
+	 * previous value is captured only when we take control and is given back
+	 * only when we release it. Without that flag, closing the board twice in a
+	 * row would record "already closed" as the value to restore, and the board
+	 * would stay shut for good behind phpBB's own notice.
 	 */
 	public function sync_board_disable($active)
 	{
@@ -294,12 +425,40 @@ class helper
 			return;
 		}
 
-		$wanted = $active ? 1 : (int) $this->config['agm_prev_board_disable'];
+		$governed = !empty($this->config['agm_board_governed']);
+		$current  = (int) $this->config['board_disable'];
 
-		if ((int) $this->config['board_disable'] !== $wanted)
+		if ($active)
 		{
-			$this->config->set('board_disable', $wanted);
+			if (!$governed)
+			{
+				// Taking control: remember how the admin had left it
+				$this->config->set('agm_prev_board_disable', $current);
+				$this->config->set('agm_board_governed', 1);
+			}
+
+			if ($current !== 1)
+			{
+				$this->config->set('board_disable', 1);
+			}
+
+			return;
 		}
+
+		if (!$governed)
+		{
+			// Not ours to restore, leave the admin's own setting alone
+			return;
+		}
+
+		$previous = (int) $this->config['agm_prev_board_disable'];
+
+		if ($current !== $previous)
+		{
+			$this->config->set('board_disable', $previous);
+		}
+
+		$this->config->set('agm_board_governed', 0);
 	}
 
 	/**

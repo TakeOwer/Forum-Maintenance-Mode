@@ -11,7 +11,7 @@ configurable from the ACP.
 | **Copyright** | (c) 2026-08-11 20:00 CEST Salvo Cortesiano |
 | **Forum** | https://netshadows.de/ombra/ |
 | **License** | GNU General Public License, version 2 (GPL-2.0) |
-| **Version** | 1.4.0 |
+| **Version** | 1.5.2 |
 
 ## Installation
 
@@ -59,12 +59,41 @@ swatch picks the colour, the slider the transparency, and the text field is rebu
 hex form. The **Default colours** button puts all eleven fields back to their original values;
 remember to save to apply.
 
+## Advance notice for all users
+
+With the **Show a notice to all users?** checkbox ticked, a banner appears at the top of every
+board page *before* maintenance starts, for example:
+
+> All users and releasers are advised that the board will undergo extraordinary maintenance from
+> 13/08/2026 06:00 to 13/08/2026 08:00. Thank you for your patience.
+
+The dates come from the **Maintenance period** fields in the ACP and are shown in the reader's own
+timezone. The wording is editable in Italian and English under Messages, with the `{START}`,
+`{END}` and `{SITENAME}` placeholders.
+
+The dates and times in the notice are shown in the **reader's own timezone**, derived from the
+exact moment saved in the ACP: the time you type in the panel is the one users see, with no shift
+caused by your account's timezone setting.
+
+The notice needs the schedule with a start and an end date, and disappears by itself once
+maintenance begins, since from then on visitors get the full-screen page. **Days in advance** lets
+you show it only in the last days before the work; 0 means always. When the notice is live, the
+ACP shows the exact text users are reading.
+
 ## Keeping phpBB's "Disable board" in step
 
 The **Also disable the phpBB board** option (on by default) sets *Disable board* in
 ACP → General → Board settings to Yes while maintenance is running, and restores the previous
 value when it ends. That is a second line of defence: should the extension ever miss a page,
 phpBB's own block takes over.
+
+While maintenance is running the extension neutralises phpBB's own block (using the
+`SKIP_CHECK_DISABLED` constant phpBB itself provides), otherwise visitors would get the plain
+"The board is temporarily unavailable" notice instead of the custom page: in phpBB's `user::setup()`
+that check fires right after the event the extension hooks into.
+
+Should the board ever stay closed with no maintenance running, the panel flags it in red and offers
+the **Reopen the board now** button.
 
 ## Access during maintenance
 
