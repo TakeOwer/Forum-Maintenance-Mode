@@ -25,6 +25,12 @@
 .agm-status div { flex: 1 1 200px; border: 1px solid #d5d9de; border-radius: 6px; padding: 12px 14px; background: #f7f9fb; }
 .agm-status span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .6px; color: #6b7785; margin-bottom: 4px; }
 .agm-status strong { font-size: 16px; }
+.agm-check { margin: 10px 0 4px; padding: 10px 14px; border: 1px solid #d5d9de; border-radius: 6px; background: #f7f9fb; max-width: 900px; }
+.agm-check ul { margin: 6px 0; padding-left: 18px; }
+.agm-check li { margin: 2px 0; }
+.agm-check .agm-yes { color: #1f9d55; }
+.agm-check .agm-no { color: #c0392b; }
+.agm-check > span { font-size: 11px; color: #6b7785; }
 .agm-status .agm-hint { display: block; margin-top: 4px; font-size: 11px; font-style: normal; color: #6b7785; line-height: 1.4; }
 .agm-on { color: #c0392b; }
 .agm-off { color: #1f9d55; }
@@ -68,6 +74,17 @@
 			<strong>{AGM_DURATION}</strong>
 		</div>
 	</div>
+	<div class="agm-check">
+		<strong>{L_AGM_PAGE_CHECK}</strong>
+		<ul>
+			<li class="<!-- IF S_AGM_CHECK_COUNTDOWN -->agm-yes<!-- ELSE -->agm-no<!-- ENDIF -->">{L_AGM_CHECK_COUNTDOWN}</li>
+			<li class="<!-- IF S_AGM_CHECK_DATES -->agm-yes<!-- ELSE -->agm-no<!-- ENDIF -->">{L_AGM_CHECK_DATES}</li>
+			<li class="<!-- IF S_AGM_CHECK_PROGRESS -->agm-yes<!-- ELSE -->agm-no<!-- ENDIF -->">{L_AGM_CHECK_PROGRESS}</li>
+			<li class="<!-- IF S_AGM_CHECK_CONTACT -->agm-yes<!-- ELSE -->agm-no<!-- ENDIF -->">{L_AGM_CHECK_CONTACT}</li>
+		</ul>
+		<span>{L_AGM_PAGE_CHECK_EXPLAIN}</span>
+	</div>
+
 	<p class="submit-buttons" style="text-align: left; border: 0; background: none;">
 		<input class="button1" type="submit" name="agm_toggle" value="<!-- IF AGM_IS_ENABLED -->{L_AGM_TURN_OFF}<!-- ELSE -->{L_AGM_TURN_ON}<!-- ENDIF -->" />
 		<a class="button2" href="{U_AGM_PREVIEW}" target="_blank" rel="noopener">{L_AGM_PREVIEW}</a>

@@ -219,7 +219,20 @@ class main_module
 			));
 		}
 
+		// What the page will actually show, and why: each block on the
+		// maintenance page has a condition, and a missing date is the usual
+		// reason something does not appear.
+		$check_countdown = (!empty($config['agm_countdown']) && $end > 0);
+		$check_dates     = (!empty($config['agm_show_dates']) && ($start > 0 || $end > 0));
+		$check_progress  = (!empty($config['agm_progress_bar']) && $start > 0 && $end > $start);
+		$check_contact   = (trim((string) $config['agm_contact_email']) !== '' || trim((string) $config['agm_contact_phone']) !== '');
+
 		$template->assign_vars(array(
+			'S_AGM_CHECK_COUNTDOWN' => $check_countdown,
+			'S_AGM_CHECK_DATES'     => $check_dates,
+			'S_AGM_CHECK_PROGRESS'  => $check_progress,
+			'S_AGM_CHECK_CONTACT'   => $check_contact,
+
 			'S_ERROR'	=> (bool) count($errors),
 			'ERROR_MSG'	=> implode('<br />', $errors),
 			'U_ACTION'	=> $this->u_action,
