@@ -46,7 +46,7 @@ class helper
 	protected $adm_path;
 
 	/** Supported front-end languages of the maintenance page */
-	const LANGS = array('it', 'en');
+	const LANGS = array('it', 'en', 'fr', 'de', 'es', 'pt', 'nl', 'pl', 'ru', 'tr', 'el', 'cs', 'ro', 'sv', 'hu', 'ar', 'ja', 'zh_cmn_hans');
 
 	public function __construct(\phpbb\config\config $config, \phpbb\config\db_text $config_text, \phpbb\template\template $template, \phpbb\user $user, \phpbb\language\language $language, \phpbb\auth\auth $auth, \phpbb\request\request $request, \phpbb\path_helper $path_helper, $root_path, $php_ext, $adm_path)
 	{
@@ -83,6 +83,118 @@ class helper
 				'footer'      => 'We will be back online soon!',
 				'notice'      => 'All users and releasers are advised that the board will undergo extraordinary maintenance from {START} to {END}. Thank you for your patience.',
 			),
+			'fr' => array(
+				'title'       => 'Site en maintenance',
+				'subtitle'    => 'Nous travaillons à améliorer le site',
+				'description' => 'Le site est momentanément indisponible pour une maintenance programmée. Nous serons de retour très bientôt.',
+				'footer'      => 'À très bientôt en ligne !',
+				'notice'      => 'Tous les membres sont informés qu\'une maintenance exceptionnelle du forum aura lieu du {START} au {END}. Merci de votre patience.',
+			),
+			'de' => array(
+				'title'       => 'Wartungsarbeiten',
+				'subtitle'    => 'Wir arbeiten an Verbesserungen der Seite',
+				'description' => 'Die Seite ist wegen geplanter Wartungsarbeiten vorübergehend nicht erreichbar. Wir sind bald wieder online.',
+				'footer'      => 'Wir sind bald wieder da!',
+				'notice'      => 'Alle Mitglieder werden darauf hingewiesen, dass vom {START} bis zum {END} außerplanmäßige Wartungsarbeiten am Forum stattfinden. Vielen Dank für Ihre Geduld.',
+			),
+			'es' => array(
+				'title'       => 'Sitio en mantenimiento',
+				'subtitle'    => 'Estamos trabajando para mejorar el sitio',
+				'description' => 'El sitio no está disponible temporalmente por mantenimiento programado. Volveremos a estar en línea muy pronto.',
+				'footer'      => '¡Volveremos pronto!',
+				'notice'      => 'Se informa a todos los usuarios de que del {START} al {END} se realizará un mantenimiento extraordinario del foro. Gracias por la paciencia.',
+			),
+			'pt' => array(
+				'title'       => 'Site em manutenção',
+				'subtitle'    => 'Estamos a trabalhar para melhorar o site',
+				'description' => 'O site está temporariamente indisponível por manutenção programada. Voltaremos a estar online em breve.',
+				'footer'      => 'Voltamos em breve!',
+				'notice'      => 'Informamos todos os utilizadores de que de {START} a {END} decorrerá uma manutenção extraordinária do fórum. Obrigado pela paciência.',
+			),
+			'nl' => array(
+				'title'       => 'Site in onderhoud',
+				'subtitle'    => 'We werken aan verbeteringen van de site',
+				'description' => 'De site is tijdelijk niet bereikbaar wegens gepland onderhoud. We zijn snel weer online.',
+				'footer'      => 'Tot snel weer online!',
+				'notice'      => 'Alle leden worden erop gewezen dat er van {START} tot {END} buitengewoon onderhoud aan het forum plaatsvindt. Dank voor het geduld.',
+			),
+			'pl' => array(
+				'title'       => 'Trwa konserwacja',
+				'subtitle'    => 'Pracujemy nad ulepszeniem serwisu',
+				'description' => 'Serwis jest chwilowo niedostępny z powodu zaplanowanej konserwacji. Wkrótce wrócimy.',
+				'footer'      => 'Wkrótce wracamy!',
+				'notice'      => 'Informujemy wszystkich użytkowników, że od {START} do {END} odbędzie się nadzwyczajna konserwacja forum. Dziękujemy za cierpliwość.',
+			),
+			'ru' => array(
+				'title'       => 'Сайт на обслуживании',
+				'subtitle'    => 'Мы работаем над улучшением сайта',
+				'description' => 'Сайт временно недоступен из-за планового обслуживания. Мы скоро вернёмся.',
+				'footer'      => 'Скоро вернёмся!',
+				'notice'      => 'Уведомляем всех пользователей, что с {START} по {END} будет проводиться внеплановое обслуживание форума. Спасибо за терпение.',
+			),
+			'tr' => array(
+				'title'       => 'Site bakımda',
+				'subtitle'    => 'Siteyi geliştirmek için çalışıyoruz',
+				'description' => 'Site planlı bakım nedeniyle geçici olarak kullanılamıyor. Kısa süre içinde geri döneceğiz.',
+				'footer'      => 'Yakında görüşmek üzere!',
+				'notice'      => 'Tüm üyelerimize duyurulur: {START} ile {END} arasında forumda olağanüstü bakım yapılacaktır. Sabrınız için teşekkür ederiz.',
+			),
+			'el' => array(
+				'title'       => 'Ο ιστότοπος συντηρείται',
+				'subtitle'    => 'Εργαζόμαστε για τη βελτίωση του ιστότοπου',
+				'description' => 'Ο ιστότοπος δεν είναι προσωρινά διαθέσιμος λόγω προγραμματισμένης συντήρησης. Επιστρέφουμε σύντομα.',
+				'footer'      => 'Τα λέμε σύντομα!',
+				'notice'      => 'Ενημερώνονται όλα τα μέλη ότι από {START} έως {END} θα γίνει έκτακτη συντήρηση του φόρουμ. Ευχαριστούμε για την υπομονή σας.',
+			),
+			'cs' => array(
+				'title'       => 'Probíhá údržba',
+				'subtitle'    => 'Pracujeme na vylepšení stránek',
+				'description' => 'Stránky jsou dočasně nedostupné kvůli plánované údržbě. Brzy budeme zpět.',
+				'footer'      => 'Brzy jsme zpět!',
+				'notice'      => 'Upozorňujeme všechny uživatele, že od {START} do {END} proběhne mimořádná údržba fóra. Děkujeme za trpělivost.',
+			),
+			'ro' => array(
+				'title'       => 'Site în mentenanță',
+				'subtitle'    => 'Lucrăm la îmbunătățirea site-ului',
+				'description' => 'Site-ul este temporar indisponibil din cauza unei mentenanțe programate. Revenim în curând.',
+				'footer'      => 'Revenim în curând!',
+				'notice'      => 'Îi informăm pe toți utilizatorii că între {START} și {END} va avea loc o mentenanță extraordinară a forumului. Vă mulțumim pentru răbdare.',
+			),
+			'sv' => array(
+				'title'       => 'Underhåll pågår',
+				'subtitle'    => 'Vi arbetar med att förbättra webbplatsen',
+				'description' => 'Webbplatsen är tillfälligt otillgänglig på grund av planerat underhåll. Vi är snart tillbaka.',
+				'footer'      => 'Vi ses snart igen!',
+				'notice'      => 'Alla medlemmar informeras om att forumet genomgår extra underhåll från {START} till {END}. Tack för tålamodet.',
+			),
+			'hu' => array(
+				'title'       => 'Karbantartás folyik',
+				'subtitle'    => 'Az oldal fejlesztésén dolgozunk',
+				'description' => 'Az oldal tervezett karbantartás miatt átmenetileg nem érhető el. Hamarosan visszatérünk.',
+				'footer'      => 'Hamarosan visszatérünk!',
+				'notice'      => 'Tájékoztatjuk a felhasználókat, hogy {START} és {END} között rendkívüli karbantartás lesz a fórumon. Köszönjük a türelmet.',
+			),
+			'ar' => array(
+				'title'       => 'الموقع قيد الصيانة',
+				'subtitle'    => 'نعمل على تحسين الموقع',
+				'description' => 'الموقع غير متاح مؤقتاً بسبب صيانة مجدولة. سنعود قريباً.',
+				'footer'      => 'سنعود قريباً!',
+				'notice'      => 'نُعلم جميع الأعضاء بأنه ستُجرى صيانة استثنائية للمنتدى من {START} إلى {END}. شكراً لصبركم.',
+			),
+			'ja' => array(
+				'title'       => 'ただいまメンテナンス中です',
+				'subtitle'    => 'サイトの改善作業を行っています',
+				'description' => '計画メンテナンスのため、一時的にご利用いただけません。まもなく再開します。',
+				'footer'      => 'まもなく再開します。',
+				'notice'      => '{START} から {END} まで、フォーラムの臨時メンテナンスを実施します。ご不便をおかけしますがご了承ください。',
+			),
+			'zh_cmn_hans' => array(
+				'title'       => '网站维护中',
+				'subtitle'    => '我们正在改进网站',
+				'description' => '因计划维护，网站暂时无法访问。我们很快就会恢复。',
+				'footer'      => '我们很快回来！',
+				'notice'      => '谨此通知各位会员：论坛将于 {START} 至 {END} 进行临时维护。感谢您的耐心等待。',
+			),
 		);
 	}
 
@@ -93,42 +205,331 @@ class helper
 	{
 		return array(
 			'it' => array(
-				'contact'     => 'Per informazioni urgenti, contattaci:',
-				'admin_ask'   => 'Sei un amministratore?',
-				'admin_btn'   => 'Accedi al Pannello Admin',
-				'remaining'   => 'Tempo Rimanente',
-				'start_label' => 'Inizio Manutenzione',
-				'end_label'   => 'Fine Stimata',
-				'progress'    => 'Progresso Manutenzione',
-				'ended'       => 'Manutenzione terminata, torniamo al forum...',
-				'u_d'         => 'g',
-				'u_h'         => 'h',
-				'u_m'         => 'm',
-				'u_s'         => 's',
-				'preview'     => 'Anteprima',
+				'contact'      => 'Per informazioni urgenti, contattaci:',
+				'admin_ask'    => 'Sei un amministratore?',
+				'admin_btn'    => 'Accedi al Pannello Admin',
+				'remaining'    => 'Tempo Rimanente',
+				'start_label'  => 'Inizio Manutenzione',
+				'end_label'    => 'Fine Stimata',
+				'progress'     => 'Progresso Manutenzione',
+				'ended'        => 'Manutenzione terminata, torniamo al forum...',
+				'u_d'          => 'g',
+				'u_h'          => 'h',
+				'u_m'          => 'm',
+				'u_s'          => 's',
+				'preview'      => 'Anteprima',
 				'admin_banner' => 'Manutenzione ATTIVA: gli utenti stanno vedendo la pagina di manutenzione. Tu vedi il forum normale perché sei amministratore. Per vedere la pagina come la vedono loro apri il forum in una finestra anonima, oppure attiva "Mostra la pagina anche agli amministratori" nel pannello.',
 			),
 			'en' => array(
-				'contact'     => 'For urgent enquiries, contact us:',
-				'admin_ask'   => 'Are you an administrator?',
-				'admin_btn'   => 'Go to the Admin Panel',
-				'remaining'   => 'Time Remaining',
-				'start_label' => 'Maintenance start',
-				'end_label'   => 'Estimated end',
-				'progress'    => 'Maintenance progress',
-				'ended'       => 'Maintenance is over, taking you back to the board...',
-				'u_d'         => 'd',
-				'u_h'         => 'h',
-				'u_m'         => 'm',
-				'u_s'         => 's',
-				'preview'     => 'Preview',
+				'contact'      => 'For urgent enquiries, contact us:',
+				'admin_ask'    => 'Are you an administrator?',
+				'admin_btn'    => 'Go to the Admin Panel',
+				'remaining'    => 'Time Remaining',
+				'start_label'  => 'Maintenance start',
+				'end_label'    => 'Estimated end',
+				'progress'     => 'Maintenance progress',
+				'ended'        => 'Maintenance is over, taking you back to the board...',
+				'u_d'          => 'd',
+				'u_h'          => 'h',
+				'u_m'          => 'm',
+				'u_s'          => 's',
+				'preview'      => 'Preview',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'fr' => array(
+				'contact'      => 'Pour toute urgence, contactez-nous :',
+				'admin_ask'    => 'Vous êtes administrateur ?',
+				'admin_btn'    => 'Accéder au panneau d\'administration',
+				'remaining'    => 'Temps restant',
+				'start_label'  => 'Début de la maintenance',
+				'end_label'    => 'Fin estimée',
+				'progress'     => 'Progression de la maintenance',
+				'ended'        => 'La maintenance est terminée, retour au forum...',
+				'u_d'          => 'j',
+				'u_h'          => 'h',
+				'u_m'          => 'm',
+				'u_s'          => 's',
+				'preview'      => 'Aperçu',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'de' => array(
+				'contact'      => 'Bei dringenden Fragen erreichen Sie uns hier:',
+				'admin_ask'    => 'Sind Sie Administrator?',
+				'admin_btn'    => 'Zum Administrationsbereich',
+				'remaining'    => 'Verbleibende Zeit',
+				'start_label'  => 'Beginn der Wartung',
+				'end_label'    => 'Voraussichtliches Ende',
+				'progress'     => 'Fortschritt der Wartung',
+				'ended'        => 'Die Wartung ist beendet, zurück zum Forum...',
+				'u_d'          => 'T',
+				'u_h'          => 'Std',
+				'u_m'          => 'Min',
+				'u_s'          => 'Sek',
+				'preview'      => 'Vorschau',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'es' => array(
+				'contact'      => 'Para asuntos urgentes, contáctanos:',
+				'admin_ask'    => '¿Eres administrador?',
+				'admin_btn'    => 'Ir al panel de administración',
+				'remaining'    => 'Tiempo restante',
+				'start_label'  => 'Inicio del mantenimiento',
+				'end_label'    => 'Fin estimado',
+				'progress'     => 'Progreso del mantenimiento',
+				'ended'        => 'El mantenimiento ha terminado, volvemos al foro...',
+				'u_d'          => 'd',
+				'u_h'          => 'h',
+				'u_m'          => 'm',
+				'u_s'          => 's',
+				'preview'      => 'Vista previa',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'pt' => array(
+				'contact'      => 'Para assuntos urgentes, contacte-nos:',
+				'admin_ask'    => 'É administrador?',
+				'admin_btn'    => 'Ir para o painel de administração',
+				'remaining'    => 'Tempo restante',
+				'start_label'  => 'Início da manutenção',
+				'end_label'    => 'Fim estimado',
+				'progress'     => 'Progresso da manutenção',
+				'ended'        => 'A manutenção terminou, a regressar ao fórum...',
+				'u_d'          => 'd',
+				'u_h'          => 'h',
+				'u_m'          => 'm',
+				'u_s'          => 's',
+				'preview'      => 'Pré-visualização',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'nl' => array(
+				'contact'      => 'Voor dringende zaken kunt u ons bereiken:',
+				'admin_ask'    => 'Bent u beheerder?',
+				'admin_btn'    => 'Naar het beheerpaneel',
+				'remaining'    => 'Resterende tijd',
+				'start_label'  => 'Begin van het onderhoud',
+				'end_label'    => 'Verwacht einde',
+				'progress'     => 'Voortgang van het onderhoud',
+				'ended'        => 'Het onderhoud is klaar, terug naar het forum...',
+				'u_d'          => 'd',
+				'u_h'          => 'u',
+				'u_m'          => 'm',
+				'u_s'          => 's',
+				'preview'      => 'Voorbeeld',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'pl' => array(
+				'contact'      => 'W pilnych sprawach prosimy o kontakt:',
+				'admin_ask'    => 'Jesteś administratorem?',
+				'admin_btn'    => 'Przejdź do panelu administracyjnego',
+				'remaining'    => 'Pozostały czas',
+				'start_label'  => 'Początek konserwacji',
+				'end_label'    => 'Przewidywany koniec',
+				'progress'     => 'Postęp konserwacji',
+				'ended'        => 'Konserwacja zakończona, wracamy na forum...',
+				'u_d'          => 'd',
+				'u_h'          => 'godz',
+				'u_m'          => 'm',
+				'u_s'          => 's',
+				'preview'      => 'Podgląd',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'ru' => array(
+				'contact'      => 'По срочным вопросам пишите нам:',
+				'admin_ask'    => 'Вы администратор?',
+				'admin_btn'    => 'Перейти в панель управления',
+				'remaining'    => 'Осталось времени',
+				'start_label'  => 'Начало обслуживания',
+				'end_label'    => 'Ожидаемое окончание',
+				'progress'     => 'Ход обслуживания',
+				'ended'        => 'Обслуживание завершено, возвращаемся на форум...',
+				'u_d'          => 'д',
+				'u_h'          => 'ч',
+				'u_m'          => 'м',
+				'u_s'          => 'с',
+				'preview'      => 'Предпросмотр',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'tr' => array(
+				'contact'      => 'Acil durumlar için bize ulaşın:',
+				'admin_ask'    => 'Yönetici misiniz?',
+				'admin_btn'    => 'Yönetim paneline git',
+				'remaining'    => 'Kalan süre',
+				'start_label'  => 'Bakımın başlangıcı',
+				'end_label'    => 'Tahmini bitiş',
+				'progress'     => 'Bakımın ilerleyişi',
+				'ended'        => 'Bakım bitti, foruma dönülüyor...',
+				'u_d'          => 'g',
+				'u_h'          => 'sa',
+				'u_m'          => 'dk',
+				'u_s'          => 'sn',
+				'preview'      => 'Önizleme',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'el' => array(
+				'contact'      => 'Για επείγοντα θέματα επικοινωνήστε μαζί μας:',
+				'admin_ask'    => 'Είστε διαχειριστής;',
+				'admin_btn'    => 'Μετάβαση στον πίνακα διαχείρισης',
+				'remaining'    => 'Χρόνος που απομένει',
+				'start_label'  => 'Έναρξη συντήρησης',
+				'end_label'    => 'Εκτιμώμενη λήξη',
+				'progress'     => 'Πρόοδος συντήρησης',
+				'ended'        => 'Η συντήρηση ολοκληρώθηκε, επιστροφή στο φόρουμ...',
+				'u_d'          => 'η',
+				'u_h'          => 'ώ',
+				'u_m'          => 'λ',
+				'u_s'          => 'δ',
+				'preview'      => 'Προεπισκόπηση',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'cs' => array(
+				'contact'      => 'V naléhavých případech nás kontaktujte:',
+				'admin_ask'    => 'Jste správce?',
+				'admin_btn'    => 'Přejít do administrace',
+				'remaining'    => 'Zbývající čas',
+				'start_label'  => 'Začátek údržby',
+				'end_label'    => 'Předpokládaný konec',
+				'progress'     => 'Průběh údržby',
+				'ended'        => 'Údržba skončila, vracíme se na fórum...',
+				'u_d'          => 'd',
+				'u_h'          => 'h',
+				'u_m'          => 'm',
+				'u_s'          => 's',
+				'preview'      => 'Náhled',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'ro' => array(
+				'contact'      => 'Pentru urgențe, contactați-ne:',
+				'admin_ask'    => 'Sunteți administrator?',
+				'admin_btn'    => 'Mergi la panoul de administrare',
+				'remaining'    => 'Timp rămas',
+				'start_label'  => 'Începutul mentenanței',
+				'end_label'    => 'Sfârșit estimat',
+				'progress'     => 'Progresul mentenanței',
+				'ended'        => 'Mentenanța s-a încheiat, revenim pe forum...',
+				'u_d'          => 'z',
+				'u_h'          => 'h',
+				'u_m'          => 'm',
+				'u_s'          => 's',
+				'preview'      => 'Previzualizare',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'sv' => array(
+				'contact'      => 'Vid brådskande ärenden, kontakta oss:',
+				'admin_ask'    => 'Är du administratör?',
+				'admin_btn'    => 'Gå till administrationen',
+				'remaining'    => 'Återstående tid',
+				'start_label'  => 'Underhållets början',
+				'end_label'    => 'Beräknat slut',
+				'progress'     => 'Underhållets förlopp',
+				'ended'        => 'Underhållet är klart, vi återvänder till forumet...',
+				'u_d'          => 'd',
+				'u_h'          => 'tim',
+				'u_m'          => 'm',
+				'u_s'          => 's',
+				'preview'      => 'Förhandsgranskning',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'hu' => array(
+				'contact'      => 'Sürgős ügyben keressen minket:',
+				'admin_ask'    => 'Ön adminisztrátor?',
+				'admin_btn'    => 'Ugrás az adminisztrációhoz',
+				'remaining'    => 'Hátralévő idő',
+				'start_label'  => 'A karbantartás kezdete',
+				'end_label'    => 'Várható befejezés',
+				'progress'     => 'A karbantartás állása',
+				'ended'        => 'A karbantartás véget ért, visszatérünk a fórumra...',
+				'u_d'          => 'n',
+				'u_h'          => 'ó',
+				'u_m'          => 'p',
+				'u_s'          => 'mp',
+				'preview'      => 'Előnézet',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'ar' => array(
+				'contact'      => 'للأمور العاجلة تواصلوا معنا:',
+				'admin_ask'    => 'هل أنت مدير؟',
+				'admin_btn'    => 'الانتقال إلى لوحة الإدارة',
+				'remaining'    => 'الوقت المتبقي',
+				'start_label'  => 'بداية الصيانة',
+				'end_label'    => 'النهاية المتوقعة',
+				'progress'     => 'تقدّم الصيانة',
+				'ended'        => 'انتهت الصيانة، جارٍ العودة إلى المنتدى...',
+				'u_d'          => 'ي',
+				'u_h'          => 'س',
+				'u_m'          => 'د',
+				'u_s'          => 'ث',
+				'preview'      => 'معاينة',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'ja' => array(
+				'contact'      => 'お急ぎの場合はこちらまで：',
+				'admin_ask'    => '管理者の方ですか？',
+				'admin_btn'    => '管理パネルへ',
+				'remaining'    => '残り時間',
+				'start_label'  => 'メンテナンス開始',
+				'end_label'    => '終了予定',
+				'progress'     => 'メンテナンスの進捗',
+				'ended'        => 'メンテナンスが終了しました。フォーラムに戻ります...',
+				'u_d'          => '日',
+				'u_h'          => '時間',
+				'u_m'          => '分',
+				'u_s'          => '秒',
+				'preview'      => 'プレビュー',
+				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
+			),
+			'zh_cmn_hans' => array(
+				'contact'      => '紧急事项请联系我们：',
+				'admin_ask'    => '您是管理员吗？',
+				'admin_btn'    => '进入管理面板',
+				'remaining'    => '剩余时间',
+				'start_label'  => '维护开始',
+				'end_label'    => '预计结束',
+				'progress'     => '维护进度',
+				'ended'        => '维护已结束，正在返回论坛…',
+				'u_d'          => '天',
+				'u_h'          => '时',
+				'u_m'          => '分',
+				'u_s'          => '秒',
+				'preview'      => '预览',
 				'admin_banner' => 'Maintenance is ACTIVE: users are seeing the maintenance page. You see the normal board because you are an administrator. To see it as they do, open the board in a private window, or turn on "Show the page to administrators too" in the panel.',
 			),
 		);
 	}
 
+
 	/**
-	 * Admin editable texts merged with the defaults.
+	 * Short label and full name of each language, for the switch on the page
+	 * and for the lists in the settings panel.
+	 */
+	public static function lang_names()
+	{
+		return array(
+			'it' => array('code' => 'IT', 'name' => 'Italiano'),
+			'en' => array('code' => 'EN', 'name' => 'English'),
+			'fr' => array('code' => 'FR', 'name' => 'Français'),
+			'de' => array('code' => 'DE', 'name' => 'Deutsch'),
+			'es' => array('code' => 'ES', 'name' => 'Español'),
+			'pt' => array('code' => 'PT', 'name' => 'Português'),
+			'nl' => array('code' => 'NL', 'name' => 'Nederlands'),
+			'pl' => array('code' => 'PL', 'name' => 'Polski'),
+			'ru' => array('code' => 'RU', 'name' => 'Русский'),
+			'tr' => array('code' => 'TR', 'name' => 'Türkçe'),
+			'el' => array('code' => 'EL', 'name' => 'Ελληνικά'),
+			'cs' => array('code' => 'CS', 'name' => 'Čeština'),
+			'ro' => array('code' => 'RO', 'name' => 'Română'),
+			'sv' => array('code' => 'SV', 'name' => 'Svenska'),
+			'hu' => array('code' => 'HU', 'name' => 'Magyar'),
+			'ar' => array('code' => 'AR', 'name' => 'العربية'),
+			'ja' => array('code' => 'JA', 'name' => '日本語'),
+			'zh_cmn_hans' => array('code' => 'ZH', 'name' => '中文'),
+		);
+	}
+
+/**
+	 * Editable texts merged with the built in ones.
+	 *
+	 * Every language is guaranteed to carry every field: a stored value is used
+	 * only when it exists and is not empty, so a partial or outdated saved set
+	 * can never leave a hole for the caller to trip over.
 	 */
 	public function get_messages()
 	{
@@ -485,9 +886,29 @@ class helper
 			return $requested;
 		}
 
-		$iso = isset($this->user->lang_name) ? strtolower(substr((string) $this->user->lang_name, 0, 2)) : 'en';
+		$board = strtolower((string) (isset($this->user->lang_name) ? $this->user->lang_name : ''));
 
-		return in_array($iso, self::LANGS, true) ? $iso : (string) ($this->config['agm_default_lang'] ?: 'it');
+		// The board pack may be named exactly like ours (zh_cmn_hans), or be a
+		// regional variant of it (pt_br, de_x_sie): try the whole name first,
+		// then the part before the underscore.
+		if ($board !== '')
+		{
+			if (in_array($board, self::LANGS, true))
+			{
+				return $board;
+			}
+
+			$short = substr($board, 0, 2);
+
+			if (in_array($short, self::LANGS, true))
+			{
+				return $short;
+			}
+		}
+
+		$fallback = (string) $this->config['agm_default_lang'];
+
+		return in_array($fallback, self::LANGS, true) ? $fallback : 'en';
 	}
 
 	/**
@@ -585,6 +1006,19 @@ class helper
 			'AGM_C_PROG_A'       => $colors['agm_color_prog_a'],
 			'AGM_C_PROG_B'       => $colors['agm_color_prog_b'],
 		));
+
+		// One button per language on the switch, in a fixed order
+		$names = self::lang_names();
+
+		foreach (self::LANGS as $iso)
+		{
+			$this->template->assign_block_vars('agm_language', array(
+				'ISO'      => $iso,
+				'CODE'     => $names[$iso]['code'],
+				'NAME'     => $names[$iso]['name'],
+				'S_ACTIVE' => ($iso === $lang),
+			));
+		}
 
 		$this->template->set_filenames(array(
 			'agm_body' => '@salvocortesiano_maintenance/maintenance_page.html',

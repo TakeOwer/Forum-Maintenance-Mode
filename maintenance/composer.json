@@ -3,7 +3,7 @@
     "type": "phpbb-extension",
     "description": "Maintenance mode with a custom full-screen page: scheduling, countdown, particles, IT/EN messages and a configurable colour palette. Estensione phpBB 3.3 che sostituisce il forum con una pagina di manutenzione a schermo intero, configurabile dall'ACP.",
     "homepage": "https://netshadows.de/ombra/",
-    "version": "1.5.4",
+    "version": "1.6.1",
     "time": "2026-08-11 20:00:00",
     "license": "GPL-2.0-only",
     "authors": [

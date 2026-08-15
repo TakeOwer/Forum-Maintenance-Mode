@@ -150,7 +150,8 @@ class main_module
 				$config->set('agm_contact_email', $request->variable('agm_contact_email', '', true));
 				$config->set('agm_contact_phone', $request->variable('agm_contact_phone', '', true));
 				$config->set('agm_logo_url', $request->variable('agm_logo_url', '', true));
-				$config->set('agm_default_lang', in_array($request->variable('agm_default_lang', 'it'), array('it', 'en'), true) ? $request->variable('agm_default_lang', 'it') : 'it');
+				$default_lang = $request->variable('agm_default_lang', 'it');
+				$config->set('agm_default_lang', in_array($default_lang, \salvocortesiano\maintenance\core\helper::LANGS, true) ? $default_lang : 'it');
 
 				$config->set('agm_particles', (int) $request->variable('agm_particles', 0));
 				$config->set('agm_show_gear', (int) $request->variable('agm_show_gear', 0));
@@ -193,6 +194,30 @@ class main_module
 		$messages = $agm->get_messages();
 		$start = $agm->get_start();
 		$end = $agm->get_end();
+
+		// One editable block per language, so the page can speak them all
+		$names = \salvocortesiano\maintenance\core\helper::lang_names();
+
+		foreach (\salvocortesiano\maintenance\core\helper::LANGS as $iso)
+		{
+			$template->assign_block_vars('agm_message', array(
+				'ISO'         => $iso,
+				'NAME'        => $names[$iso]['name'],
+				'CODE'        => $names[$iso]['code'],
+				'TITLE'       => $messages[$iso]['title'],
+				'SUBTITLE'    => $messages[$iso]['subtitle'],
+				'DESCRIPTION' => $messages[$iso]['description'],
+				'FOOTER'      => $messages[$iso]['footer'],
+				'NOTICE'      => $messages[$iso]['notice'],
+				'S_DEFAULT'   => ($iso === (string) $config['agm_default_lang']),
+			));
+
+			$template->assign_block_vars('agm_lang_option', array(
+				'ISO'        => $iso,
+				'NAME'       => $names[$iso]['name'],
+				'S_SELECTED' => ($iso === (string) $config['agm_default_lang']),
+			));
+		}
 
 		$template->assign_vars(array(
 			'S_ERROR'	=> (bool) count($errors),
@@ -256,17 +281,6 @@ class main_module
 			'AGM_C_CD_FROM_A'	=> $this->alpha_part($colors['agm_color_cd_from']),
 			'AGM_C_CD_TO_A'		=> $this->alpha_part($colors['agm_color_cd_to']),
 			'AGM_C_CARD_A'		=> $this->alpha_part($colors['agm_color_card']),
-
-			'AGM_IT_TITLE'			=> $messages['it']['title'],
-			'AGM_IT_SUBTITLE'		=> $messages['it']['subtitle'],
-			'AGM_IT_DESCRIPTION'	=> $messages['it']['description'],
-			'AGM_IT_FOOTER'			=> $messages['it']['footer'],
-			'AGM_IT_NOTICE'			=> $messages['it']['notice'],
-			'AGM_EN_TITLE'			=> $messages['en']['title'],
-			'AGM_EN_SUBTITLE'		=> $messages['en']['subtitle'],
-			'AGM_EN_DESCRIPTION'	=> $messages['en']['description'],
-			'AGM_EN_FOOTER'			=> $messages['en']['footer'],
-			'AGM_EN_NOTICE'			=> $messages['en']['notice'],
 
 			'AGM_LAST_ON'		=> !empty($config['agm_last_on']) ? $user->format_date((int) $config['agm_last_on']) : $language->lang('AGM_NOT_AVAILABLE'),
 			'AGM_LAST_OFF'		=> !empty($config['agm_last_off']) ? $user->format_date((int) $config['agm_last_off']) : $language->lang('AGM_NOT_AVAILABLE'),

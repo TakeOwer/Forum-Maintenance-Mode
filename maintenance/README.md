@@ -10,7 +10,7 @@ Estensione phpBB 3.3 che sostituisce il forum con una pagina di manutenzione a s
 | **Copyright** | (c) 2026-08-11 20:00 CEST Salvo Cortesiano |
 | **Forum** | https://netshadows.de/ombra/ |
 | **Licenza** | GNU General Public License, version 2 (GPL-2.0) |
-| **Versione** | 1.5.2 |
+| **Versione** | 1.6.1 |
 
 ## Installazione
 
@@ -37,6 +37,22 @@ Se non imposti un logo, il badge accanto al nome mostra le sue iniziali.
 | Contatti | email e telefono mostrati nel riquadro |
 | Messaggi IT / EN | titolo, sottotitolo, descrizione, frase di chiusura per ogni lingua |
 | Log attivazioni | ultima attivazione, ultima disattivazione, totale attivazioni |
+
+## Lingue
+
+La pagina di manutenzione parla **18 lingue**: italiano, inglese, francese, tedesco, spagnolo,
+portoghese, olandese, polacco, russo, turco, greco, ceco, rumeno, svedese, ungherese, arabo,
+giapponese e cinese semplificato.
+
+Ogni visitatore la vede nella lingua del suo account, e con il selettore in alto può cambiarla:
+c'è un pulsante per ciascuna lingua. Se la sua lingua non è fra queste, viene usata quella scelta
+come predefinita nel pannello.
+
+Anche il pannello di amministrazione è tradotto nelle stesse 18 lingue, e i testi della pagina sono
+modificabili per ognuna, dalla sezione *Messaggi della pagina*: ogni lingua ha il suo riquadro
+richiudibile, già compilato con la traduzione di serie.
+
+Per aggiungerne altre c'è la guida [TRANSLATING.md](TRANSLATING.md).
 
 ## Il riquadro countdown
 

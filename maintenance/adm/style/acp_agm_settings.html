@@ -35,6 +35,11 @@
 .agm-alpha input[type="range"] { width: 90px; }
 .agm-alpha b { font-family: monospace; min-width: 34px; }
 .agm-warn { margin-top: 10px; padding: 10px 14px; border: 1px solid #c0392b; border-left-width: 5px; border-radius: 4px; background: #fdecea; color: #7b241c; max-width: 900px; }
+.agm-lang-block { border: 1px solid #d5d9de; border-radius: 6px; margin: 0 0 8px; background: #fbfcfd; }
+.agm-lang-block > summary { cursor: pointer; padding: 10px 14px; font-weight: bold; }
+.agm-lang-block[open] > summary { border-bottom: 1px solid #e3e7ec; }
+.agm-lang-block dl { margin: 0; }
+.agm-lang-code { font-weight: normal; color: #6b7785; font-size: 11px; letter-spacing: 1px; }
 .agm-notice-preview { border: 1px solid #e0a800; border-left-width: 5px; border-radius: 4px; background: #fff8e1; color: #5c4600; padding: 10px 14px; max-width: 720px; }
 .agm-preview-frame { width: 100%; height: 420px; border: 1px solid #c3ccd6; border-radius: 6px; margin-top: 10px; display: none; }
 </style>
@@ -174,8 +179,9 @@
 	<dl>
 		<dt><label for="agm_default_lang">{L_AGM_DEFAULT_LANG}</label><br /><span>{L_AGM_DEFAULT_LANG_EXPLAIN}</span></dt>
 		<dd><select id="agm_default_lang" name="agm_default_lang">
-			<option value="it"<!-- IF AGM_DEFAULT_LANG == 'it' --> selected="selected"<!-- ENDIF -->>Italiano</option>
-			<option value="en"<!-- IF AGM_DEFAULT_LANG == 'en' --> selected="selected"<!-- ENDIF -->>English</option>
+			<!-- BEGIN agm_lang_option -->
+				<option value="{agm_lang_option.ISO}"<!-- IF agm_lang_option.S_SELECTED --> selected="selected"<!-- ENDIF -->>{agm_lang_option.NAME}</option>
+			<!-- END agm_lang_option -->
 		</select></dd>
 	</dl>
 	<dl>
@@ -253,51 +259,34 @@
 </fieldset>
 
 <fieldset>
-	<legend>{L_AGM_MESSAGES_IT}</legend>
-	<dl>
-		<dt><label for="agm_it_title">{L_AGM_M_TITLE}</label></dt>
-		<dd><input type="text" id="agm_it_title" name="agm_it_title" size="60" maxlength="255" value="{AGM_IT_TITLE}" /></dd>
-	</dl>
-	<dl>
-		<dt><label for="agm_it_subtitle">{L_AGM_M_SUBTITLE}</label></dt>
-		<dd><input type="text" id="agm_it_subtitle" name="agm_it_subtitle" size="60" maxlength="255" value="{AGM_IT_SUBTITLE}" /></dd>
-	</dl>
-	<dl>
-		<dt><label for="agm_it_description">{L_AGM_M_DESCRIPTION}</label></dt>
-		<dd><textarea id="agm_it_description" name="agm_it_description" rows="4" cols="60">{AGM_IT_DESCRIPTION}</textarea></dd>
-	</dl>
-	<dl>
-		<dt><label for="agm_it_footer">{L_AGM_M_FOOTER}</label></dt>
-		<dd><input type="text" id="agm_it_footer" name="agm_it_footer" size="60" maxlength="255" value="{AGM_IT_FOOTER}" /></dd>
-	</dl>
-	<dl>
-		<dt><label for="agm_it_notice">{L_AGM_M_NOTICE}</label><br /><span>{L_AGM_M_NOTICE_EXPLAIN}</span></dt>
-		<dd><textarea id="agm_it_notice" name="agm_it_notice" rows="3" cols="60">{AGM_IT_NOTICE}</textarea></dd>
-	</dl>
-</fieldset>
+	<legend>{L_AGM_MESSAGES}</legend>
+	<p>{L_AGM_MESSAGES_EXPLAIN}</p>
 
-<fieldset>
-	<legend>{L_AGM_MESSAGES_EN}</legend>
-	<dl>
-		<dt><label for="agm_en_title">{L_AGM_M_TITLE}</label></dt>
-		<dd><input type="text" id="agm_en_title" name="agm_en_title" size="60" maxlength="255" value="{AGM_EN_TITLE}" /></dd>
-	</dl>
-	<dl>
-		<dt><label for="agm_en_subtitle">{L_AGM_M_SUBTITLE}</label></dt>
-		<dd><input type="text" id="agm_en_subtitle" name="agm_en_subtitle" size="60" maxlength="255" value="{AGM_EN_SUBTITLE}" /></dd>
-	</dl>
-	<dl>
-		<dt><label for="agm_en_description">{L_AGM_M_DESCRIPTION}</label></dt>
-		<dd><textarea id="agm_en_description" name="agm_en_description" rows="4" cols="60">{AGM_EN_DESCRIPTION}</textarea></dd>
-	</dl>
-	<dl>
-		<dt><label for="agm_en_footer">{L_AGM_M_FOOTER}</label></dt>
-		<dd><input type="text" id="agm_en_footer" name="agm_en_footer" size="60" maxlength="255" value="{AGM_EN_FOOTER}" /></dd>
-	</dl>
-	<dl>
-		<dt><label for="agm_en_notice">{L_AGM_M_NOTICE}</label><br /><span>{L_AGM_M_NOTICE_EXPLAIN}</span></dt>
-		<dd><textarea id="agm_en_notice" name="agm_en_notice" rows="3" cols="60">{AGM_EN_NOTICE}</textarea></dd>
-	</dl>
+	<!-- BEGIN agm_message -->
+	<details class="agm-lang-block"<!-- IF agm_message.S_DEFAULT --> open="open"<!-- ENDIF -->>
+		<summary>{agm_message.NAME} <span class="agm-lang-code">{agm_message.CODE}</span></summary>
+		<dl>
+			<dt><label for="agm_{agm_message.ISO}_title">{L_AGM_M_TITLE}</label></dt>
+			<dd><input type="text" id="agm_{agm_message.ISO}_title" name="agm_{agm_message.ISO}_title" size="60" maxlength="255" value="{agm_message.TITLE}" /></dd>
+		</dl>
+		<dl>
+			<dt><label for="agm_{agm_message.ISO}_subtitle">{L_AGM_M_SUBTITLE}</label></dt>
+			<dd><input type="text" id="agm_{agm_message.ISO}_subtitle" name="agm_{agm_message.ISO}_subtitle" size="60" maxlength="255" value="{agm_message.SUBTITLE}" /></dd>
+		</dl>
+		<dl>
+			<dt><label for="agm_{agm_message.ISO}_description">{L_AGM_M_DESCRIPTION}</label></dt>
+			<dd><textarea id="agm_{agm_message.ISO}_description" name="agm_{agm_message.ISO}_description" rows="3" cols="60">{agm_message.DESCRIPTION}</textarea></dd>
+		</dl>
+		<dl>
+			<dt><label for="agm_{agm_message.ISO}_footer">{L_AGM_M_FOOTER}</label></dt>
+			<dd><input type="text" id="agm_{agm_message.ISO}_footer" name="agm_{agm_message.ISO}_footer" size="60" maxlength="255" value="{agm_message.FOOTER}" /></dd>
+		</dl>
+		<dl>
+			<dt><label for="agm_{agm_message.ISO}_notice">{L_AGM_M_NOTICE}</label><br /><span>{L_AGM_M_NOTICE_EXPLAIN}</span></dt>
+			<dd><textarea id="agm_{agm_message.ISO}_notice" name="agm_{agm_message.ISO}_notice" rows="3" cols="60">{agm_message.NOTICE}</textarea></dd>
+		</dl>
+	</details>
+	<!-- END agm_message -->
 </fieldset>
 
 <fieldset>

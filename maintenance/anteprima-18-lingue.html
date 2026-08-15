@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<!--
+	Forum Maintenance Mode - phpBB extension
+	Author:    Salvo Cortesiano
+	Copyright: (c) 2026-08-11 20:00 CEST Salvo Cortesiano
+	Forum:     https://netshadows.de/ombra/
+	License:   GNU General Public License, version 2 (GPL-2.0)
+-->
+<html lang="it" data-agm-lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="author" content="Salvo Cortesiano" />
+<meta name="copyright" content="(c) 2026-08-11 20:00 CEST Salvo Cortesiano - https://netshadows.de/ombra/" />
+<title>Sito in Manutenzione &middot; Le Ombre della Rete 360°</title>
+<style>
+:root {
+	--agm-bg-start: #0f1c3f;
+	--agm-bg-end: #1d4ed8;
+	--agm-topbar: #0b1120;
+	--agm-accent: #3b82f6;
+	--agm-text: #f8fafc;
+	--agm-muted: #c7d2fe;
+	--agm-card: #16255180;
+	--agm-cd-from: #2b3f8fcc;
+	--agm-cd-to: #5b3a8fcc;
+	--agm-prog-a: #60a5fa;
+	--agm-prog-b: #c084fc;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+	margin: 0;
+	min-height: 100vh;
+	color: var(--agm-text);
+	background: linear-gradient(135deg, var(--agm-bg-start) 0%, var(--agm-bg-end) 100%);
+	background-attachment: fixed;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	overflow-x: hidden;
+}
+#agm-particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.agm-topbar {
+	position: relative;
+	z-index: 3;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 14px 28px;
+	background: var(--agm-topbar);
+	box-shadow: 0 1px 0 rgba(255, 255, 255, .06);
+}
+.agm-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.agm-brand img { max-height: 38px; display: block; }
+.agm-badge {
+	display: inline-flex; align-items: center; justify-content: center;
+	min-width: 42px; height: 42px; padding: 0 8px;
+	font-family: Georgia, "Times New Roman", serif; font-size: 22px; letter-spacing: -1px;
+	border-radius: 8px; background: rgba(255, 255, 255, .07);
+}
+.agm-brand-name { font-family: Georgia, "Times New Roman", serif; font-size: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.agm-langs { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px; max-width: 62%; }
+.agm-langs button {
+	font: inherit; font-size: 14px; letter-spacing: .5px;
+	color: var(--agm-muted); background: transparent; border: 0; border-radius: 6px;
+	padding: 7px 12px; cursor: pointer; transition: background .15s ease, color .15s ease;
+}
+.agm-langs button:hover { color: #fff; background: rgba(255, 255, 255, .08); }
+.agm-langs button[aria-current="true"] { color: #fff; background: var(--agm-accent); }
+.agm-wrap { position: relative; z-index: 2; width: 100%; max-width: 760px; margin: 0 auto; padding: 60px 18px 80px; text-align: center; }
+.agm-gear { color: var(--agm-accent); margin-bottom: 30px; }
+.agm-gear svg { width: 62px; height: 62px; display: block; margin: 0 auto; }
+.agm-spin svg { animation: agm-rotate 9s linear infinite; transform-origin: 50% 50%; }
+@keyframes agm-rotate { to { transform: rotate(360deg); } }
+h1 {
+	margin: 0 0 14px;
+	font-family: Georgia, "Times New Roman", serif;
+	font-weight: 700;
+	font-size: clamp(2.1rem, 7vw, 4.2rem);
+	line-height: 1.05;
+	letter-spacing: -.5px;
+	overflow-wrap: break-word;
+}
+.agm-subtitle { margin: 0 0 26px; font-size: clamp(1.05rem, 3.4vw, 1.6rem); color: var(--agm-muted); font-weight: 400; }
+.agm-description { margin: 0 auto 32px; max-width: 560px; font-size: clamp(.95rem, 2.6vw, 1rem); line-height: 1.6; color: rgba(255, 255, 255, .82); }
+.agm-card {
+	background: var(--agm-card);
+	border: 1px solid rgba(255, 255, 255, .08);
+	border-radius: 12px;
+	padding: 22px 24px;
+	margin: 0 auto 32px;
+	max-width: 620px;
+	backdrop-filter: blur(3px);
+}
+.agm-card-title { font-weight: 700; margin-bottom: 14px; }
+.agm-contact-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 34px; }
+.agm-contact-list a { color: var(--agm-accent); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; word-break: break-word; }
+.agm-contact-list a:hover { text-decoration: underline; }
+.agm-contact-list svg { width: 15px; height: 15px; fill: currentColor; flex-shrink: 0; }
+.agm-footer-text { margin: 0 0 34px; font-size: clamp(1rem, 2.8vw, 1.05rem); color: var(--agm-muted); }
+
+/* Countdown card ---------------------------------------------------- */
+.agm-cd {
+	max-width: 620px;
+	margin: 0 auto 32px;
+	padding: 24px 22px 26px;
+	border-radius: 14px;
+	border: 1px solid rgba(255, 255, 255, .1);
+	background: linear-gradient(100deg, var(--agm-cd-from) 0%, var(--agm-cd-to) 100%);
+	box-shadow: 0 12px 34px rgba(5, 10, 35, .28);
+}
+.agm-cd-head { display: flex; align-items: center; justify-content: center; gap: 9px; font-weight: 600; font-size: clamp(1rem, 3vw, 1.15rem); }
+.agm-cd-head svg { width: 19px; height: 19px; fill: var(--agm-accent); flex-shrink: 0; }
+.agm-cd-time {
+	margin: 10px 0 22px;
+	font-size: clamp(2.4rem, 10vw, 3.6rem);
+	font-weight: 700;
+	line-height: 1.05;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: -1px;
+}
+.agm-cd-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.agm-cd-cell { background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .09); border-radius: 10px; padding: 13px 12px; }
+.agm-cd-cell-head { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: .85rem; font-weight: 600; color: rgba(255, 255, 255, .92); }
+.agm-cd-cell-head svg { width: 11px; height: 11px; flex-shrink: 0; }
+.agm-dot-start { fill: #34d399; }
+.agm-dot-end { fill: #f87171; }
+.agm-cd-date { display: block; margin-top: 7px; font-size: clamp(.85rem, 2.6vw, .95rem); font-weight: 700; font-variant-numeric: tabular-nums; }
+.agm-cd-progress { margin-top: 20px; }
+.agm-cd-prog-head { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: .88rem; margin-bottom: 10px; color: rgba(255, 255, 255, .92); }
+.agm-cd-prog-head svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+.agm-bar { height: 10px; border-radius: 999px; background: rgba(255, 255, 255, .14); overflow: hidden; }
+.agm-bar i { display: block; height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, var(--agm-prog-a), var(--agm-prog-b)); transition: width .6s ease; }
+
+.agm-admin { max-width: 460px; padding: 20px 24px; }
+.agm-admin p { margin: 0 0 14px; color: rgba(255, 255, 255, .6); font-size: .92rem; }
+.agm-btn {
+	display: inline-flex; align-items: center; gap: 9px;
+	padding: 12px 22px; border-radius: 8px;
+	background: var(--agm-accent); color: #fff; font-weight: 600; text-decoration: none;
+	border: 0; cursor: pointer; transition: filter .15s ease, transform .15s ease;
+}
+.agm-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.agm-btn svg { width: 16px; height: 16px; fill: currentColor; }
+.agm-preview-flag {
+	position: fixed; z-index: 5; left: 50%; bottom: 18px; transform: translateX(-50%);
+	background: #f59e0b; color: #1f2937; font-weight: 700; font-size: .78rem;
+	letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 18px; border-radius: 999px;
+}
+a:focus-visible, button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+@media (max-width: 600px) {
+	.agm-topbar { padding: 11px 14px; }
+	.agm-badge { min-width: 36px; height: 36px; font-size: 19px; }
+	.agm-brand-name { font-size: 16px; max-width: 34vw; }
+	.agm-langs button { padding: 6px 9px; font-size: 13px; }
+	.agm-wrap { padding: 40px 14px 60px; }
+	.agm-gear svg { width: 50px; height: 50px; }
+	.agm-gear { margin-bottom: 22px; }
+	.agm-card, .agm-cd { padding: 18px 16px; border-radius: 12px; }
+	.agm-cd-grid { grid-template-columns: 1fr; gap: 10px; }
+	.agm-contact-list { flex-direction: column; align-items: center; gap: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.agm-spin svg { animation: none; }
+	.agm-bar i { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="agm-particles" aria-hidden="true"></canvas>
+
+<header class="agm-topbar">
+	<div class="agm-brand">
+		
+			<span class="agm-badge">LO</span>
+		
+		<span class="agm-brand-name">Le Ombre della Rete 360°</span>
+	</div>
+	
+	<nav class="agm-langs" aria-label="Language">
+		
+			<button type="button" data-agm-setlang="it" title="Italiano" aria-current="true">IT</button>
+		
+			<button type="button" data-agm-setlang="en" title="English">EN</button>
+		
+			<button type="button" data-agm-setlang="fr" title="Français">FR</button>
+		
+			<button type="button" data-agm-setlang="de" title="Deutsch">DE</button>
+		
+			<button type="button" data-agm-setlang="es" title="Español">ES</button>
+		
+			<button type="button" data-agm-setlang="pt" title="Português">PT</button>
+		
+			<button type="button" data-agm-setlang="nl" title="Nederlands">NL</button>
+		
+			<button type="button" data-agm-setlang="pl" title="Polski">PL</button>
+		
+			<button type="button" data-agm-setlang="ru" title="Русский">RU</button>
+		
+			<button type="button" data-agm-setlang="tr" title="Türkçe">TR</button>
+		
+			<button type="button" data-agm-setlang="el" title="Ελληνικά">EL</button>
+		
+			<button type="button" data-agm-setlang="cs" title="Čeština">CS</button>
+		
+			<button type="button" data-agm-setlang="ro" title="Română">RO</button>
+		
+			<button type="button" data-agm-setlang="sv" title="Svenska">SV</button>
+		
+			<button type="button" data-agm-setlang="hu" title="Magyar">HU</button>
+		
+			<button type="button" data-agm-setlang="ar" title="العربية">AR</button>
+		
+			<button type="button" data-agm-setlang="ja" title="日本語">JA</button>
+		
+			<button type="button" data-agm-setlang="zh_cmn_hans" title="中文">ZH</button>
+		
+	</nav>
+	
+</header>
+
+<main class="agm-wrap">
+	
+	<div class="agm-gear agm-spin" aria-hidden="true">
+		<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M19.14 12.94a7.7 7.7 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.3 7.3 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.58.24-1.12.56-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.67 8.84a.5.5 0 0 0 .12.64l2.03 1.58a7.7 7.7 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.31.6.22l2.39-.96c.5.38 1.04.7 1.62.94l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.58-.24 1.12-.56 1.62-.94l2.39.96c.22.09.47 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58ZM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2Z"/></svg>
+	</div>
+	
+
+	<h1 data-agm-key="title">Sito in Manutenzione</h1>
+	<p class="agm-subtitle" data-agm-key="subtitle">Stiamo lavorando per migliorare il sito</p>
+	<p class="agm-description" data-agm-key="description">Il sito è temporaneamente non disponibile per manutenzione programmata. Torneremo presto online.</p>
+
+	
+	<section class="agm-cd" id="agm-countdown-box" data-agm-start="1786780745" data-agm-end="1786781465" data-agm-now="1786780865" data-agm-home="#">
+		<div class="agm-cd-head">
+			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 10.6-3.5 2.1-.9-1.5 2.9-1.7V6h1.5v6.6Z"/></svg>
+			<span data-agm-key="remaining">Tempo Rimanente</span>
+		</div>
+		<div class="agm-cd-time" id="agm-cd-time" role="timer" aria-live="polite">&mdash;</div>
+
+		
+		<div class="agm-cd-grid">
+			<div class="agm-cd-cell">
+				<span class="agm-cd-cell-head"><svg viewBox="0 0 12 12" aria-hidden="true"><path class="agm-dot-start" d="M2 1.5 10 6l-8 4.5z"/></svg><span data-agm-key="start_label">Inizio Manutenzione</span></span>
+				<span class="agm-cd-date" data-agm-ts="1786780745">15/08/2026 07:59</span>
+			</div>
+			<div class="agm-cd-cell">
+				<span class="agm-cd-cell-head"><svg viewBox="0 0 12 12" aria-hidden="true"><rect class="agm-dot-end" x="2" y="2" width="8" height="8" rx="1.5"/></svg><span data-agm-key="end_label">Fine Stimata</span></span>
+				<span class="agm-cd-date" data-agm-ts="1786781465">15/08/2026 08:11</span>
+			</div>
+		</div>
+		
+
+		
+		<div class="agm-cd-progress">
+			<div class="agm-cd-prog-head">
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18v1.5H3zM5 13h2.5v5H5zm4.75-4h2.5v9h-2.5zm4.75 6H17v3h-2.5zm4.75-9H21v12h-2.75z"/></svg>
+				<span data-agm-key="progress">Progresso Manutenzione</span>
+			</div>
+			<div class="agm-bar"><i id="agm-bar-fill"></i></div>
+		</div>
+		
+	</section>
+	
+
+	
+	<section class="agm-card">
+		<div class="agm-card-title" data-agm-key="contact">Per informazioni urgenti, contattaci:</div>
+		<div class="agm-contact-list">
+			
+			<a href="mailto:info@netshadows.de"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4.4-8 5-8-5V6l8 5 8-5v2.4Z"/></svg>info@netshadows.de</a>
+			
+			
+			<a href="tel:+39 000000000"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.58 3.6a1 1 0 0 1-.25 1l-2.23 2.2Z"/></svg>+39 000000000</a>
+			
+		</div>
+	</section>
+	
+
+	<p class="agm-footer-text" data-agm-key="footer">Torneremo presto online!</p>
+
+	
+	<section class="agm-card agm-admin">
+		<p data-agm-key="admin_ask">Sei un amministratore?</p>
+		<a class="agm-btn" href="#">
+			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94a7.7 7.7 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.3 7.3 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.58.24-1.12.56-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.67 8.84a.5.5 0 0 0 .12.64l2.03 1.58a7.7 7.7 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.31.6.22l2.39-.96c.5.38 1.04.7 1.62.94l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.58-.24 1.12-.56 1.62-.94l2.39.96c.22.09.47 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58ZM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2Z"/></svg>
+			<span data-agm-key="admin_btn">Accedi al Pannello Admin</span>
+		</a>
+	</section>
+	
+</main>
+
+<div class="agm-preview-flag" data-agm-key="preview">Anteprima</div>
+
+<script type="application/json" id="agm-i18n">{"it": {"title": "Sito in Manutenzione", "subtitle": "Stiamo lavorando per migliorare il sito", "description": "Il sito è temporaneamente non disponibile per manutenzione programmata. Torneremo presto online.", "footer": "Torneremo presto online!", "notice": "Si avvisa tutti gli utenti ed i releaser che dal {START} al {END} vi sarà un intervento di manutenzione straordinaria del forum. Grazie per la pazienza.", "contact": "Per informazioni urgenti, contattaci:", "admin_ask": "Sei un amministratore?", "admin_btn": "Accedi al Pannello Admin", "remaining": "Tempo Rimanente", "start_label": "Inizio Manutenzione", "end_label": "Fine Stimata", "progress": "Progresso Manutenzione", "ended": "Manutenzione terminata, torniamo al forum...", "u_d": "g", "u_h": "h", "u_m": "m", "u_s": "s", "preview": "Anteprima"}, "en": {"title": "Site under maintenance", "subtitle": "We are working to improve the site", "description": "The site is temporarily unavailable due to scheduled maintenance. We will be back online shortly.", "footer": "We will be back online soon!", "notice": "All users and releasers are advised that the board will undergo extraordinary maintenance from {START} to {END}. Thank you for your patience.", "contact": "For urgent enquiries, contact us:", "admin_ask": "Are you an administrator?", "admin_btn": "Go to the Admin Panel", "remaining": "Time Remaining", "start_label": "Maintenance start", "end_label": "Estimated end", "progress": "Maintenance progress", "ended": "Maintenance is over, taking you back to the board...", "u_d": "d", "u_h": "h", "u_m": "m", "u_s": "s", "preview": "Preview"}, "fr": {"title": "Site en maintenance", "subtitle": "Nous travaillons à améliorer le site", "description": "Le site est momentanément indisponible pour une maintenance programmée. Nous serons de retour très bientôt.", "footer": "À très bientôt en ligne !", "notice": "Tous les membres sont informés qu'une maintenance exceptionnelle du forum aura lieu du {START} au {END}. Merci de votre patience.", "contact": "Pour toute urgence, contactez-nous :", "admin_ask": "Vous êtes administrateur ?", "admin_btn": "Accéder au panneau d'administration", "remaining": "Temps restant", "start_label": "Début de la maintenance", "end_label": "Fin estimée", "progress": "Progression de la maintenance", "ended": "La maintenance est terminée, retour au forum...", "u_d": "j", "u_h": "h", "u_m": "m", "u_s": "s", "preview": "Aperçu"}, "de": {"title": "Wartungsarbeiten", "subtitle": "Wir arbeiten an Verbesserungen der Seite", "description": "Die Seite ist wegen geplanter Wartungsarbeiten vorübergehend nicht erreichbar. Wir sind bald wieder online.", "footer": "Wir sind bald wieder da!", "notice": "Alle Mitglieder werden darauf hingewiesen, dass vom {START} bis zum {END} außerplanmäßige Wartungsarbeiten am Forum stattfinden. Vielen Dank für Ihre Geduld.", "contact": "Bei dringenden Fragen erreichen Sie uns hier:", "admin_ask": "Sind Sie Administrator?", "admin_btn": "Zum Administrationsbereich", "remaining": "Verbleibende Zeit", "start_label": "Beginn der Wartung", "end_label": "Voraussichtliches Ende", "progress": "Fortschritt der Wartung", "ended": "Die Wartung ist beendet, zurück zum Forum...", "u_d": "T", "u_h": "Std", "u_m": "Min", "u_s": "Sek", "preview": "Vorschau"}, "es": {"title": "Sitio en mantenimiento", "subtitle": "Estamos trabajando para mejorar el sitio", "description": "El sitio no está disponible temporalmente por mantenimiento programado. Volveremos a estar en línea muy pronto.", "footer": "¡Volveremos pronto!", "notice": "Se informa a todos los usuarios de que del {START} al {END} se realizará un mantenimiento extraordinario del foro. Gracias por la paciencia.", "contact": "Para asuntos urgentes, contáctanos:", "admin_ask": "¿Eres administrador?", "admin_btn": "Ir al panel de administración", "remaining": "Tiempo restante", "start_label": "Inicio del mantenimiento", "end_label": "Fin estimado", "progress": "Progreso del mantenimiento", "ended": "El mantenimiento ha terminado, volvemos al foro...", "u_d": "d", "u_h": "h", "u_m": "m", "u_s": "s", "preview": "Vista previa"}, "pt": {"title": "Site em manutenção", "subtitle": "Estamos a trabalhar para melhorar o site", "description": "O site está temporariamente indisponível por manutenção programada. Voltaremos a estar online em breve.", "footer": "Voltamos em breve!", "notice": "Informamos todos os utilizadores de que de {START} a {END} decorrerá uma manutenção extraordinária do fórum. Obrigado pela paciência.", "contact": "Para assuntos urgentes, contacte-nos:", "admin_ask": "É administrador?", "admin_btn": "Ir para o painel de administração", "remaining": "Tempo restante", "start_label": "Início da manutenção", "end_label": "Fim estimado", "progress": "Progresso da manutenção", "ended": "A manutenção terminou, a regressar ao fórum...", "u_d": "d", "u_h": "h", "u_m": "m", "u_s": "s", "preview": "Pré-visualização"}, "nl": {"title": "Site in onderhoud", "subtitle": "We werken aan verbeteringen van de site", "description": "De site is tijdelijk niet bereikbaar wegens gepland onderhoud. We zijn snel weer online.", "footer": "Tot snel weer online!", "notice": "Alle leden worden erop gewezen dat er van {START} tot {END} buitengewoon onderhoud aan het forum plaatsvindt. Dank voor het geduld.", "contact": "Voor dringende zaken kunt u ons bereiken:", "admin_ask": "Bent u beheerder?", "admin_btn": "Naar het beheerpaneel", "remaining": "Resterende tijd", "start_label": "Begin van het onderhoud", "end_label": "Verwacht einde", "progress": "Voortgang van het onderhoud", "ended": "Het onderhoud is klaar, terug naar het forum...", "u_d": "d", "u_h": "u", "u_m": "m", "u_s": "s", "preview": "Voorbeeld"}, "pl": {"title": "Trwa konserwacja", "subtitle": "Pracujemy nad ulepszeniem serwisu", "description": "Serwis jest chwilowo niedostępny z powodu zaplanowanej konserwacji. Wkrótce wrócimy.", "footer": "Wkrótce wracamy!", "notice": "Informujemy wszystkich użytkowników, że od {START} do {END} odbędzie się nadzwyczajna konserwacja forum. Dziękujemy za cierpliwość.", "contact": "W pilnych sprawach prosimy o kontakt:", "admin_ask": "Jesteś administratorem?", "admin_btn": "Przejdź do panelu administracyjnego", "remaining": "Pozostały czas", "start_label": "Początek konserwacji", "end_label": "Przewidywany koniec", "progress": "Postęp konserwacji", "ended": "Konserwacja zakończona, wracamy na forum...", "u_d": "d", "u_h": "godz", "u_m": "m", "u_s": "s", "preview": "Podgląd"}, "ru": {"title": "Сайт на обслуживании", "subtitle": "Мы работаем над улучшением сайта", "description": "Сайт временно недоступен из-за планового обслуживания. Мы скоро вернёмся.", "footer": "Скоро вернёмся!", "notice": "Уведомляем всех пользователей, что с {START} по {END} будет проводиться внеплановое обслуживание форума. Спасибо за терпение.", "contact": "По срочным вопросам пишите нам:", "admin_ask": "Вы администратор?", "admin_btn": "Перейти в панель управления", "remaining": "Осталось времени", "start_label": "Начало обслуживания", "end_label": "Ожидаемое окончание", "progress": "Ход обслуживания", "ended": "Обслуживание завершено, возвращаемся на форум...", "u_d": "д", "u_h": "ч", "u_m": "м", "u_s": "с", "preview": "Предпросмотр"}, "tr": {"title": "Site bakımda", "subtitle": "Siteyi geliştirmek için çalışıyoruz", "description": "Site planlı bakım nedeniyle geçici olarak kullanılamıyor. Kısa süre içinde geri döneceğiz.", "footer": "Yakında görüşmek üzere!", "notice": "Tüm üyelerimize duyurulur: {START} ile {END} arasında forumda olağanüstü bakım yapılacaktır. Sabrınız için teşekkür ederiz.", "contact": "Acil durumlar için bize ulaşın:", "admin_ask": "Yönetici misiniz?", "admin_btn": "Yönetim paneline git", "remaining": "Kalan süre", "start_label": "Bakımın başlangıcı", "end_label": "Tahmini bitiş", "progress": "Bakımın ilerleyişi", "ended": "Bakım bitti, foruma dönülüyor...", "u_d": "g", "u_h": "sa", "u_m": "dk", "u_s": "sn", "preview": "Önizleme"}, "el": {"title": "Ο ιστότοπος συντηρείται", "subtitle": "Εργαζόμαστε για τη βελτίωση του ιστότοπου", "description": "Ο ιστότοπος δεν είναι προσωρινά διαθέσιμος λόγω προγραμματισμένης συντήρησης. Επιστρέφουμε σύντομα.", "footer": "Τα λέμε σύντομα!", "notice": "Ενημερώνονται όλα τα μέλη ότι από {START} έως {END} θα γίνει έκτακτη συντήρηση του φόρουμ. Ευχαριστούμε για την υπομονή σας.", "contact": "Για επείγοντα θέματα επικοινωνήστε μαζί μας:", "admin_ask": "Είστε διαχειριστής;", "admin_btn": "Μετάβαση στον πίνακα διαχείρισης", "remaining": "Χρόνος που απομένει", "start_label": "Έναρξη συντήρησης", "end_label": "Εκτιμώμενη λήξη", "progress": "Πρόοδος συντήρησης", "ended": "Η συντήρηση ολοκληρώθηκε, επιστροφή στο φόρουμ...", "u_d": "η", "u_h": "ώ", "u_m": "λ", "u_s": "δ", "preview": "Προεπισκόπηση"}, "cs": {"title": "Probíhá údržba", "subtitle": "Pracujeme na vylepšení stránek", "description": "Stránky jsou dočasně nedostupné kvůli plánované údržbě. Brzy budeme zpět.", "footer": "Brzy jsme zpět!", "notice": "Upozorňujeme všechny uživatele, že od {START} do {END} proběhne mimořádná údržba fóra. Děkujeme za trpělivost.", "contact": "V naléhavých případech nás kontaktujte:", "admin_ask": "Jste správce?", "admin_btn": "Přejít do administrace", "remaining": "Zbývající čas", "start_label": "Začátek údržby", "end_label": "Předpokládaný konec", "progress": "Průběh údržby", "ended": "Údržba skončila, vracíme se na fórum...", "u_d": "d", "u_h": "h", "u_m": "m", "u_s": "s", "preview": "Náhled"}, "ro": {"title": "Site în mentenanță", "subtitle": "Lucrăm la îmbunătățirea site-ului", "description": "Site-ul este temporar indisponibil din cauza unei mentenanțe programate. Revenim în curând.", "footer": "Revenim în curând!", "notice": "Îi informăm pe toți utilizatorii că între {START} și {END} va avea loc o mentenanță extraordinară a forumului. Vă mulțumim pentru răbdare.", "contact": "Pentru urgențe, contactați-ne:", "admin_ask": "Sunteți administrator?", "admin_btn": "Mergi la panoul de administrare", "remaining": "Timp rămas", "start_label": "Începutul mentenanței", "end_label": "Sfârșit estimat", "progress": "Progresul mentenanței", "ended": "Mentenanța s-a încheiat, revenim pe forum...", "u_d": "z", "u_h": "h", "u_m": "m", "u_s": "s", "preview": "Previzualizare"}, "sv": {"title": "Underhåll pågår", "subtitle": "Vi arbetar med att förbättra webbplatsen", "description": "Webbplatsen är tillfälligt otillgänglig på grund av planerat underhåll. Vi är snart tillbaka.", "footer": "Vi ses snart igen!", "notice": "Alla medlemmar informeras om att forumet genomgår extra underhåll från {START} till {END}. Tack för tålamodet.", "contact": "Vid brådskande ärenden, kontakta oss:", "admin_ask": "Är du administratör?", "admin_btn": "Gå till administrationen", "remaining": "Återstående tid", "start_label": "Underhållets början", "end_label": "Beräknat slut", "progress": "Underhållets förlopp", "ended": "Underhållet är klart, vi återvänder till forumet...", "u_d": "d", "u_h": "tim", "u_m": "m", "u_s": "s", "preview": "Förhandsgranskning"}, "hu": {"title": "Karbantartás folyik", "subtitle": "Az oldal fejlesztésén dolgozunk", "description": "Az oldal tervezett karbantartás miatt átmenetileg nem érhető el. Hamarosan visszatérünk.", "footer": "Hamarosan visszatérünk!", "notice": "Tájékoztatjuk a felhasználókat, hogy {START} és {END} között rendkívüli karbantartás lesz a fórumon. Köszönjük a türelmet.", "contact": "Sürgős ügyben keressen minket:", "admin_ask": "Ön adminisztrátor?", "admin_btn": "Ugrás az adminisztrációhoz", "remaining": "Hátralévő idő", "start_label": "A karbantartás kezdete", "end_label": "Várható befejezés", "progress": "A karbantartás állása", "ended": "A karbantartás véget ért, visszatérünk a fórumra...", "u_d": "n", "u_h": "ó", "u_m": "p", "u_s": "mp", "preview": "Előnézet"}, "ar": {"title": "الموقع قيد الصيانة", "subtitle": "نعمل على تحسين الموقع", "description": "الموقع غير متاح مؤقتاً بسبب صيانة مجدولة. سنعود قريباً.", "footer": "سنعود قريباً!", "notice": "نُعلم جميع الأعضاء بأنه ستُجرى صيانة استثنائية للمنتدى من {START} إلى {END}. شكراً لصبركم.", "contact": "للأمور العاجلة تواصلوا معنا:", "admin_ask": "هل أنت مدير؟", "admin_btn": "الانتقال إلى لوحة الإدارة", "remaining": "الوقت المتبقي", "start_label": "بداية الصيانة", "end_label": "النهاية المتوقعة", "progress": "تقدّم الصيانة", "ended": "انتهت الصيانة، جارٍ العودة إلى المنتدى...", "u_d": "ي", "u_h": "س", "u_m": "د", "u_s": "ث", "preview": "معاينة"}, "ja": {"title": "ただいまメンテナンス中です", "subtitle": "サイトの改善作業を行っています", "description": "計画メンテナンスのため、一時的にご利用いただけません。まもなく再開します。", "footer": "まもなく再開します。", "notice": "{START} から {END} まで、フォーラムの臨時メンテナンスを実施します。ご不便をおかけしますがご了承ください。", "contact": "お急ぎの場合はこちらまで：", "admin_ask": "管理者の方ですか？", "admin_btn": "管理パネルへ", "remaining": "残り時間", "start_label": "メンテナンス開始", "end_label": "終了予定", "progress": "メンテナンスの進捗", "ended": "メンテナンスが終了しました。フォーラムに戻ります...", "u_d": "日", "u_h": "時間", "u_m": "分", "u_s": "秒", "preview": "プレビュー"}, "zh_cmn_hans": {"title": "网站维护中", "subtitle": "我们正在改进网站", "description": "因计划维护，网站暂时无法访问。我们很快就会恢复。", "footer": "我们很快回来！", "notice": "谨此通知各位会员：论坛将于 {START} 至 {END} 进行临时维护。感谢您的耐心等待。", "contact": "紧急事项请联系我们：", "admin_ask": "您是管理员吗？", "admin_btn": "进入管理面板", "remaining": "剩余时间", "start_label": "维护开始", "end_label": "预计结束", "progress": "维护进度", "ended": "维护已结束，正在返回论坛…", "u_d": "天", "u_h": "时", "u_m": "分", "u_s": "秒", "preview": "预览"}}</script>
+<script>
+(function () {
+	'use strict';
+
+	var i18n = {};
+	try { i18n = JSON.parse(document.getElementById('agm-i18n').textContent); } catch (e) { i18n = {}; }
+
+	var root = document.documentElement;
+	var current = root.getAttribute('data-agm-lang') || 'it';
+
+	function applyLang(lang) {
+		if (!i18n[lang]) { return; }
+		current = lang;
+		root.setAttribute('data-agm-lang', lang);
+		root.setAttribute('lang', lang);
+
+		var nodes = document.querySelectorAll('[data-agm-key]');
+		for (var i = 0; i < nodes.length; i++) {
+			var key = nodes[i].getAttribute('data-agm-key');
+			if (i18n[lang][key]) { nodes[i].textContent = i18n[lang][key]; }
+		}
+
+		var buttons = document.querySelectorAll('[data-agm-setlang]');
+		for (var j = 0; j < buttons.length; j++) {
+			buttons[j].setAttribute('aria-current', buttons[j].getAttribute('data-agm-setlang') === lang ? 'true' : 'false');
+		}
+
+		if (typeof window.agmTick === 'function') { window.agmTick(); }
+		try { window.localStorage.setItem('agm_lang', lang); } catch (e) {}
+	}
+
+	var switcher = document.querySelectorAll('[data-agm-setlang]');
+	for (var k = 0; k < switcher.length; k++) {
+		switcher[k].addEventListener('click', function () { applyLang(this.getAttribute('data-agm-setlang')); });
+	}
+
+	try {
+		var stored = window.localStorage.getItem('agm_lang');
+		if (stored && stored !== current && i18n[stored]) { applyLang(stored); }
+	} catch (e) {}
+
+	/* Dates in the visitor's own timezone ------------------------------ */
+	function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+	var stamps = document.querySelectorAll('[data-agm-ts]');
+	for (var s = 0; s < stamps.length; s++) {
+		var ts = parseInt(stamps[s].getAttribute('data-agm-ts'), 10);
+		if (ts > 0) {
+			var when = new Date(ts * 1000);
+			stamps[s].textContent = pad2(when.getDate()) + '/' + pad2(when.getMonth() + 1) + '/' + when.getFullYear() + ' ' + pad2(when.getHours()) + ':' + pad2(when.getMinutes());
+		}
+	}
+
+	/* Countdown ------------------------------------------------------- */
+	var box = document.getElementById('agm-countdown-box');
+	if (box) {
+		var start = parseInt(box.getAttribute('data-agm-start'), 10) || 0;
+		var end = parseInt(box.getAttribute('data-agm-end'), 10) || 0;
+		var serverNow = parseInt(box.getAttribute('data-agm-now'), 10) || 0;
+		var loaded = Date.now();
+		var output = document.getElementById('agm-cd-time');
+		var fill = document.getElementById('agm-bar-fill');
+		var finished = false;
+
+		function unit(key, fallback) {
+			return (i18n[current] && i18n[current][key]) ? i18n[current][key] : fallback;
+		}
+
+		function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+		function label(left) {
+			var d = Math.floor(left / 86400);
+			var h = Math.floor(left % 86400 / 3600);
+			var m = Math.floor(left % 3600 / 60);
+			var s = left % 60;
+
+			if (d > 0) { return d + unit('u_d', 'd') + ' ' + pad(h) + unit('u_h', 'h') + ' ' + pad(m) + unit('u_m', 'm'); }
+			if (h > 0) { return h + unit('u_h', 'h') + ' ' + pad(m) + unit('u_m', 'm') + ' ' + pad(s) + unit('u_s', 's'); }
+			if (m > 0) { return m + unit('u_m', 'm') + ' ' + pad(s) + unit('u_s', 's'); }
+			return s + unit('u_s', 's');
+		}
+
+		function tick() {
+			var now = serverNow + Math.floor((Date.now() - loaded) / 1000);
+			var left = end - now;
+
+			if (left <= 0) {
+				output.textContent = '0' + unit('u_s', 's');
+				if (fill) { fill.style.width = '100%'; }
+				if (!finished) {
+					finished = true;
+					var head = box.querySelector('[data-agm-key="remaining"]');
+					if (head) { head.setAttribute('data-agm-key', 'ended'); head.textContent = unit('ended', ''); }
+
+					// Maintenance is over: go back to the board itself.
+					var home = box.getAttribute('data-agm-home');
+					window.setTimeout(function () {
+						window.location.href = home ? home : '/';
+					}, 3000);
+				}
+				return;
+			}
+
+			output.textContent = label(left);
+
+			if (fill && start && end > start) {
+				var done = Math.max(0, Math.min(100, (now - start) / (end - start) * 100));
+				fill.style.width = done.toFixed(1) + '%';
+			}
+
+			window.setTimeout(tick, 1000);
+		}
+
+		window.agmTick = function () { if (!finished) { output.textContent = label(Math.max(0, end - (serverNow + Math.floor((Date.now() - loaded) / 1000)))); } };
+		tick();
+	}
+
+	/* Particles ------------------------------------------------------- */
+	var canvas = document.getElementById('agm-particles');
+	if (canvas && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		var ctx = canvas.getContext('2d');
+		var dots = [];
+		var width = 0, height = 0;
+
+		function resize() {
+			width = canvas.width = window.innerWidth;
+			height = canvas.height = window.innerHeight;
+			var count = Math.min(140, Math.round(width * height / 12000));
+			dots = [];
+			for (var i = 0; i < count; i++) {
+				dots.push({
+					x: Math.random() * width,
+					y: Math.random() * height,
+					r: Math.random() * 1.8 + 0.4,
+					vx: (Math.random() - 0.5) * 0.25,
+					vy: Math.random() * 0.45 + 0.08,
+					a: Math.random() * 0.5 + 0.2
+				});
+			}
+		}
+
+		function draw() {
+			ctx.clearRect(0, 0, width, height);
+			for (var i = 0; i < dots.length; i++) {
+				var d = dots[i];
+				d.x += d.vx;
+				d.y += d.vy;
+				if (d.y - d.r > height) { d.y = -d.r; d.x = Math.random() * width; }
+				if (d.x < -5) { d.x = width + 5; }
+				if (d.x > width + 5) { d.x = -5; }
+				ctx.beginPath();
+				ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+				ctx.fillStyle = 'rgba(255,255,255,' + d.a + ')';
+				ctx.fill();
+			}
+			window.requestAnimationFrame(draw);
+		}
+
+		var resizeTimer;
+		window.addEventListener('resize', function () {
+			window.clearTimeout(resizeTimer);
+			resizeTimer = window.setTimeout(resize, 200);
+		});
+		resize();
+		draw();
+	}
+
+	/* Automatic refresh ----------------------------------------------- */
+	var refresh = 0;
+	if (refresh > 0) {
+		window.setTimeout(function () {
+			// Cache buster: without it a cached copy of this page can keep
+			// showing after maintenance has been switched off.
+			var url = window.location.href.split('#')[0].replace(/([?&])_agm=\d+/, '$1');
+			url = url.replace(/[?&]$/, '');
+			window.location.replace(url + (url.indexOf('?') === -1 ? '?' : '&') + '_agm=' + Date.now());
+		}, refresh * 1000);
+	}
+}());
+</script>
+</body>
+</html>

@@ -11,7 +11,7 @@ configurable from the ACP.
 | **Copyright** | (c) 2026-08-11 20:00 CEST Salvo Cortesiano |
 | **Forum** | https://netshadows.de/ombra/ |
 | **License** | GNU General Public License, version 2 (GPL-2.0) |
-| **Version** | 1.5.2 |
+| **Version** | 1.6.1 |
 
 ## Installation
 
@@ -38,6 +38,22 @@ here. When no logo is set, the badge beside the name shows its initials.
 | Contacts | email and phone shown in the card |
 | Messages IT / EN | title, subtitle, description and closing line for each language |
 | Activation log | last activation, last deactivation, total activations |
+
+## Languages
+
+The maintenance page speaks **18 languages**: Italian, English, French, German, Spanish,
+Portuguese, Dutch, Polish, Russian, Turkish, Greek, Czech, Romanian, Swedish, Hungarian, Arabic,
+Japanese and Simplified Chinese.
+
+Every visitor sees it in the language of their account and can change it with the switch at the
+top, which carries one button per language. If their language is not among these, the default
+chosen in the panel is used.
+
+The administration panel is translated into the same 18 languages, and the page texts are editable
+for each of them under *Page messages*: every language has its own collapsible block, already
+filled in with the bundled translation.
+
+To add more, see [TRANSLATING.md](TRANSLATING.md).
 
 ## The countdown card
 

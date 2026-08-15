@@ -61,7 +61,7 @@ body {
 	border-radius: 8px; background: rgba(255, 255, 255, .07);
 }
 .agm-brand-name { font-family: Georgia, "Times New Roman", serif; font-size: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.agm-langs { display: flex; gap: 4px; flex-shrink: 0; }
+.agm-langs { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 3px; max-width: 62%; }
 .agm-langs button {
 	font: inherit; font-size: 14px; letter-spacing: .5px;
 	color: var(--agm-muted); background: transparent; border: 0; border-radius: 6px;
@@ -184,8 +184,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid #fff; outline-offset:
 	</div>
 	<!-- IF AGM_SHOW_LANGS -->
 	<nav class="agm-langs" aria-label="Language">
-		<button type="button" data-agm-setlang="it"<!-- IF AGM_LANG == 'it' --> aria-current="true"<!-- ENDIF -->>IT</button>
-		<button type="button" data-agm-setlang="en"<!-- IF AGM_LANG == 'en' --> aria-current="true"<!-- ENDIF -->>EN</button>
+		<!-- BEGIN agm_language -->
+			<button type="button" data-agm-setlang="{agm_language.ISO}" title="{agm_language.NAME}"<!-- IF agm_language.S_ACTIVE --> aria-current="true"<!-- ENDIF -->>{agm_language.CODE}</button>
+		<!-- END agm_language -->
 	</nav>
 	<!-- ENDIF -->
 </header>
