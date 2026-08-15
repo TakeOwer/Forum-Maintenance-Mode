@@ -527,7 +527,8 @@ class helper
 
 			'AGM_SITENAME'      => $this->config['sitename'],
 			'AGM_INITIALS'      => $this->initials((string) $this->config['sitename']),
-			'AGM_LOGO_URL'      => trim((string) $this->config['agm_logo_url']),
+			//'AGM_LOGO_URL'      => trim((string) $this->config['agm_logo_url']),
+			'AGM_LOGO_URL'      => $this->logo_url($board_url),
 
 			'AGM_TITLE'         => $payload[$lang]['title'],
 			'AGM_SUBTITLE'      => $payload[$lang]['subtitle'],
@@ -620,6 +621,40 @@ class helper
 
 		garbage_collection();
 		exit_handler();
+	}
+
+	/**
+	 * Absolute URL of the logo.
+	 *
+	 * A relative path such as "images/logo.png" would be resolved against
+	 * app.php/maintenance/preview when the page is previewed, which points
+	 * nowhere. Anchoring it to the board URL makes it work from any address.
+	 * Spaces and other unsafe characters in the file name are encoded too.
+	 */
+	protected function logo_url($board_url)
+	{
+		$logo = trim((string) $this->config['agm_logo_url']);
+
+		if ($logo === '')
+		{
+			return '';
+		}
+
+		// Already absolute, or protocol relative: leave it alone
+		if (preg_match('#^(https?:)?//#i', $logo) || strpos($logo, 'data:') === 0)
+		{
+			return $logo;
+		}
+
+		$logo = ltrim($logo, '/');
+		$parts = explode('/', $logo);
+
+		foreach ($parts as $i => $part)
+		{
+			$parts[$i] = rawurlencode($part);
+		}
+
+		return $board_url . '/' . implode('/', $parts);
 	}
 
 	/**
