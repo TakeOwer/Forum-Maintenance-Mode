@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<!--
+	Forum Maintenance Mode - phpBB extension
+	Author:    Salvo Cortesiano
+	Copyright: (c) 2026-08-11 20:00 CEST Salvo Cortesiano
+	Forum:     https://netshadows.de/ombra/
+	License:   GNU General Public License, version 2 (GPL-2.0)
+-->
+<html lang="{AGM_LANG}" data-agm-lang="{AGM_LANG}">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="author" content="Salvo Cortesiano" />
+<meta name="copyright" content="(c) 2026-08-11 20:00 CEST Salvo Cortesiano - https://netshadows.de/ombra/" />
+<title>{AGM_TITLE} &middot; {AGM_SITENAME}</title>
+<style>
+:root {
+	--agm-bg-start: {AGM_C_BG_START};
+	--agm-bg-end: {AGM_C_BG_END};
+	--agm-topbar: {AGM_C_TOPBAR};
+	--agm-accent: {AGM_C_ACCENT};
+	--agm-text: {AGM_C_TEXT};
+	--agm-muted: {AGM_C_MUTED};
+	--agm-card: {AGM_C_CARD};
+	--agm-cd-from: {AGM_C_CD_FROM};
+	--agm-cd-to: {AGM_C_CD_TO};
+	--agm-prog-a: {AGM_C_PROG_A};
+	--agm-prog-b: {AGM_C_PROG_B};
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+	margin: 0;
+	min-height: 100vh;
+	color: var(--agm-text);
+	background: linear-gradient(135deg, var(--agm-bg-start) 0%, var(--agm-bg-end) 100%);
+	background-attachment: fixed;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	overflow-x: hidden;
+}
+#agm-particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.agm-topbar {
+	position: relative;
+	z-index: 3;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 14px 28px;
+	background: var(--agm-topbar);
+	box-shadow: 0 1px 0 rgba(255, 255, 255, .06);
+}
+.agm-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.agm-brand img { max-height: 38px; display: block; }
+.agm-badge {
+	display: inline-flex; align-items: center; justify-content: center;
+	min-width: 42px; height: 42px; padding: 0 8px;
+	font-family: Georgia, "Times New Roman", serif; font-size: 22px; letter-spacing: -1px;
+	border-radius: 8px; background: rgba(255, 255, 255, .07);
+}
+.agm-brand-name { font-family: Georgia, "Times New Roman", serif; font-size: 20px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.agm-langs { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.agm-lang-label { font-size: 12px; letter-spacing: .5px; text-transform: uppercase; color: var(--agm-muted); }
+.agm-langs select {
+	font: inherit;
+	font-size: 14px;
+	color: #fff;
+	background: rgba(255, 255, 255, .1);
+	border: 1px solid rgba(255, 255, 255, .18);
+	border-radius: 6px;
+	padding: 7px 10px;
+	cursor: pointer;
+	max-width: 46vw;
+}
+.agm-langs select option { color: #111; background: #fff; }
+.agm-langs noscript a { color: var(--agm-muted); margin-left: 6px; font-size: 13px; }
+.agm-langs button {
+	font: inherit; font-size: 14px; letter-spacing: .5px;
+	color: var(--agm-muted); background: transparent; border: 0; border-radius: 6px;
+	padding: 7px 12px; cursor: pointer; transition: background .15s ease, color .15s ease;
+}
+.agm-langs button:hover { color: #fff; background: rgba(255, 255, 255, .08); }
+.agm-langs button[aria-current="true"] { color: #fff; background: var(--agm-accent); }
+.agm-wrap { position: relative; z-index: 2; width: 100%; max-width: 760px; margin: 0 auto; padding: 60px 18px 80px; text-align: center; }
+.agm-gear { color: var(--agm-accent); margin-bottom: 30px; }
+.agm-gear svg { width: 62px; height: 62px; display: block; margin: 0 auto; }
+.agm-spin svg { animation: agm-rotate 9s linear infinite; transform-origin: 50% 50%; }
+@keyframes agm-rotate { to { transform: rotate(360deg); } }
+h1 {
+	margin: 0 0 14px;
+	font-family: Georgia, "Times New Roman", serif;
+	font-weight: 700;
+	font-size: clamp(2.1rem, 7vw, 4.2rem);
+	line-height: 1.05;
+	letter-spacing: -.5px;
+	overflow-wrap: break-word;
+}
+.agm-subtitle { margin: 0 0 26px; font-size: clamp(1.05rem, 3.4vw, 1.6rem); color: var(--agm-muted); font-weight: 400; }
+.agm-description { margin: 0 auto 32px; max-width: 560px; font-size: clamp(.95rem, 2.6vw, 1rem); line-height: 1.6; color: rgba(255, 255, 255, .82); }
+.agm-card {
+	background: var(--agm-card);
+	border: 1px solid rgba(255, 255, 255, .08);
+	border-radius: 12px;
+	padding: 22px 24px;
+	margin: 0 auto 32px;
+	max-width: 620px;
+	backdrop-filter: blur(3px);
+}
+.agm-card-title { font-weight: 700; margin-bottom: 14px; }
+.agm-contact-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 34px; }
+.agm-contact-list a { color: var(--agm-accent); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; word-break: break-word; }
+.agm-contact-list a:hover { text-decoration: underline; }
+.agm-contact-list svg { width: 15px; height: 15px; fill: currentColor; flex-shrink: 0; }
+.agm-footer-text { margin: 0 0 34px; font-size: clamp(1rem, 2.8vw, 1.05rem); color: var(--agm-muted); }
+
+/* Countdown card ---------------------------------------------------- */
+.agm-cd {
+	max-width: 620px;
+	margin: 0 auto 32px;
+	padding: 24px 22px 26px;
+	border-radius: 14px;
+	border: 1px solid rgba(255, 255, 255, .1);
+	background: linear-gradient(100deg, var(--agm-cd-from) 0%, var(--agm-cd-to) 100%);
+	box-shadow: 0 12px 34px rgba(5, 10, 35, .28);
+}
+.agm-cd-head { display: flex; align-items: center; justify-content: center; gap: 9px; font-weight: 600; font-size: clamp(1rem, 3vw, 1.15rem); }
+.agm-cd-head svg { width: 19px; height: 19px; fill: var(--agm-accent); flex-shrink: 0; }
+.agm-cd-time {
+	margin: 10px 0 22px;
+	font-size: clamp(2.4rem, 10vw, 3.6rem);
+	font-weight: 700;
+	line-height: 1.05;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: -1px;
+}
+.agm-cd-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.agm-cd-cell { background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .09); border-radius: 10px; padding: 13px 12px; }
+.agm-cd-cell-head { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: .85rem; font-weight: 600; color: rgba(255, 255, 255, .92); }
+.agm-cd-cell-head svg { width: 11px; height: 11px; flex-shrink: 0; }
+.agm-dot-start { fill: #34d399; }
+.agm-dot-end { fill: #f87171; }
+.agm-cd-date { display: block; margin-top: 7px; font-size: clamp(.85rem, 2.6vw, .95rem); font-weight: 700; font-variant-numeric: tabular-nums; }
+.agm-cd-progress { margin-top: 20px; }
+.agm-cd-prog-head { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: .88rem; margin-bottom: 10px; color: rgba(255, 255, 255, .92); }
+.agm-cd-prog-head svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+.agm-bar { height: 10px; border-radius: 999px; background: rgba(255, 255, 255, .14); overflow: hidden; }
+.agm-bar i { display: block; height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, var(--agm-prog-a), var(--agm-prog-b)); transition: width .6s ease; }
+
+.agm-admin { max-width: 460px; padding: 20px 24px; }
+.agm-admin p { margin: 0 0 14px; color: rgba(255, 255, 255, .6); font-size: .92rem; }
+.agm-btn {
+	display: inline-flex; align-items: center; gap: 9px;
+	padding: 12px 22px; border-radius: 8px;
+	background: var(--agm-accent); color: #fff; font-weight: 600; text-decoration: none;
+	border: 0; cursor: pointer; transition: filter .15s ease, transform .15s ease;
+}
+.agm-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.agm-btn svg { width: 16px; height: 16px; fill: currentColor; }
+.agm-preview-flag {
+	position: fixed; z-index: 5; left: 50%; bottom: 18px; transform: translateX(-50%);
+	background: #f59e0b; color: #1f2937; font-weight: 700; font-size: .78rem;
+	letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 18px; border-radius: 999px;
+}
+a:focus-visible, button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+@media (max-width: 600px) {
+	.agm-topbar { padding: 11px 14px; }
+	.agm-badge { min-width: 36px; height: 36px; font-size: 19px; }
+	.agm-brand-name { font-size: 16px; max-width: 34vw; }
+	.agm-langs button { padding: 6px 9px; font-size: 13px; }
+	.agm-wrap { padding: 40px 14px 60px; }
+	.agm-gear svg { width: 50px; height: 50px; }
+	.agm-gear { margin-bottom: 22px; }
+	.agm-card, .agm-cd { padding: 18px 16px; border-radius: 12px; }
+	.agm-cd-grid { grid-template-columns: 1fr; gap: 10px; }
+	.agm-contact-list { flex-direction: column; align-items: center; gap: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.agm-spin svg { animation: none; }
+	.agm-bar i { transition: none; }
+}
+</style>
+</head>
+<body data-agm-preview="<!-- IF AGM_PREVIEW -->1<!-- ELSE -->0<!-- ENDIF -->">
+
+<!-- IF AGM_SHOW_PARTICLES --><canvas id="agm-particles" aria-hidden="true"></canvas><!-- ENDIF -->
+
+<header class="agm-topbar">
+	<div class="agm-brand">
+		<!-- IF AGM_LOGO_URL -->
+			<img src="{AGM_LOGO_URL}" alt="{AGM_SITENAME}" />
+		<!-- ELSE -->
+			<span class="agm-badge">{AGM_INITIALS}</span>
+		<!-- ENDIF -->
+		<span class="agm-brand-name">{AGM_SITENAME}</span>
+	</div>
+	<!-- IF AGM_SHOW_LANGS -->
+	<nav class="agm-langs" aria-label="{AGM_CHOOSE_LABEL}">
+		<label class="agm-lang-label" for="agm-lang-select">{AGM_CHOOSE_LABEL}</label>
+		<select id="agm-lang-select" aria-label="{AGM_CHOOSE_LABEL}" autocomplete="off">
+			<!-- BEGIN agm_language -->
+				<option value="{agm_language.ISO}"<!-- IF agm_language.S_ACTIVE --> selected="selected"<!-- ENDIF -->>{agm_language.NAME}</option>
+			<!-- END agm_language -->
+		</select>
+		<noscript>
+			<!-- BEGIN agm_language -->
+				<a href="?agm_lang={agm_language.ISO}">{agm_language.CODE}</a>
+			<!-- END agm_language -->
+		</noscript>
+	</nav>
+	<!-- ENDIF -->
+</header>
+
+<main class="agm-wrap">
+	<!-- IF AGM_SHOW_GEAR -->
+	<div class="agm-gear<!-- IF AGM_SPIN_GEAR --> agm-spin<!-- ENDIF -->" aria-hidden="true">
+		<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M19.14 12.94a7.7 7.7 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.3 7.3 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.58.24-1.12.56-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.67 8.84a.5.5 0 0 0 .12.64l2.03 1.58a7.7 7.7 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.31.6.22l2.39-.96c.5.38 1.04.7 1.62.94l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.58-.24 1.12-.56 1.62-.94l2.39.96c.22.09.47 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58ZM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2Z"/></svg>
+	</div>
+	<!-- ENDIF -->
+
+	<h1 data-agm-key="AGM_PAGE_TITLE">{AGM_TITLE}</h1>
+	<p class="agm-subtitle" data-agm-key="AGM_PAGE_SUBTITLE">{AGM_SUBTITLE}</p>
+	<p class="agm-description" data-agm-key="AGM_PAGE_DESCRIPTION">{AGM_DESCRIPTION}</p>
+
+	<!-- IF AGM_SHOW_COUNTDOWN -->
+	<section class="agm-cd" id="agm-countdown-box" data-agm-start="{AGM_START_TS}" data-agm-end="{AGM_END_TS}" data-agm-now="{AGM_NOW_TS}" data-agm-home="{U_AGM_INDEX}">
+		<div class="agm-cd-head">
+			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 10.6-3.5 2.1-.9-1.5 2.9-1.7V6h1.5v6.6Z"/></svg>
+			<span data-agm-key="AGM_PAGE_REMAINING">{AGM_L_REMAINING}</span>
+		</div>
+		<div class="agm-cd-time" id="agm-cd-time" role="timer" aria-live="polite">&mdash;</div>
+
+		<!-- IF AGM_SHOW_DATES -->
+		<div class="agm-cd-grid">
+			<div class="agm-cd-cell">
+				<span class="agm-cd-cell-head"><svg viewBox="0 0 12 12" aria-hidden="true"><path class="agm-dot-start" d="M2 1.5 10 6l-8 4.5z"/></svg><span data-agm-key="AGM_PAGE_START">{AGM_L_START}</span></span>
+				<span class="agm-cd-date" data-agm-ts="{AGM_START_TS}">{AGM_START_HUMAN}</span>
+			</div>
+			<div class="agm-cd-cell">
+				<span class="agm-cd-cell-head"><svg viewBox="0 0 12 12" aria-hidden="true"><rect class="agm-dot-end" x="2" y="2" width="8" height="8" rx="1.5"/></svg><span data-agm-key="AGM_PAGE_END">{AGM_L_END}</span></span>
+				<span class="agm-cd-date" data-agm-ts="{AGM_END_TS}">{AGM_END_HUMAN}</span>
+			</div>
+		</div>
+		<!-- ENDIF -->
+
+		<!-- IF AGM_SHOW_PROGRESS -->
+		<div class="agm-cd-progress">
+			<div class="agm-cd-prog-head">
+				<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18v1.5H3zM5 13h2.5v5H5zm4.75-4h2.5v9h-2.5zm4.75 6H17v3h-2.5zm4.75-9H21v12h-2.75z"/></svg>
+				<span data-agm-key="AGM_PAGE_PROGRESS">{AGM_L_PROGRESS}</span>
+			</div>
+			<div class="agm-bar"><i id="agm-bar-fill"></i></div>
+		</div>
+		<!-- ENDIF -->
+	</section>
+	<!-- ENDIF -->
+
+	<!-- IF AGM_SHOW_CONTACT -->
+	<section class="agm-card">
+		<div class="agm-card-title" data-agm-key="AGM_PAGE_CONTACT">{AGM_CONTACT_LABEL}</div>
+		<div class="agm-contact-list">
+			<!-- IF AGM_EMAIL -->
+			<a href="mailto:{AGM_EMAIL}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4.4-8 5-8-5V6l8 5 8-5v2.4Z"/></svg>{AGM_EMAIL}</a>
+			<!-- ENDIF -->
+			<!-- IF AGM_PHONE -->
+			<a href="tel:{AGM_PHONE}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.58 3.6a1 1 0 0 1-.25 1l-2.23 2.2Z"/></svg>{AGM_PHONE}</a>
+			<!-- ENDIF -->
+		</div>
+	</section>
+	<!-- ENDIF -->
+
+	<p class="agm-footer-text" data-agm-key="AGM_PAGE_FOOTER">{AGM_FOOTER_TEXT}</p>
+
+	<!-- IF AGM_SHOW_ADMIN -->
+	<section class="agm-card agm-admin">
+		<p data-agm-key="AGM_PAGE_ADMIN_ASK">{AGM_ADMIN_ASK}</p>
+		<a class="agm-btn" href="{U_AGM_ADMIN}">
+			<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94a7.7 7.7 0 0 0 0-1.88l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.3 7.3 0 0 0-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.58.24-1.12.56-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.67 8.84a.5.5 0 0 0 .12.64l2.03 1.58a7.7 7.7 0 0 0 0 1.88l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.13.22.39.31.6.22l2.39-.96c.5.38 1.04.7 1.62.94l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.58-.24 1.12-.56 1.62-.94l2.39.96c.22.09.47 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58ZM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2Z"/></svg>
+			<span data-agm-key="AGM_PAGE_ADMIN_BTN">{AGM_ADMIN_BTN}</span>
+		</a>
+	</section>
+	<!-- ENDIF -->
+</main>
+
+<!-- IF AGM_PREVIEW --><div class="agm-preview-flag" data-agm-key="AGM_PAGE_PREVIEW">{AGM_PREVIEW_LABEL}</div><!-- ENDIF -->
+
+<script type="application/json" id="agm-i18n">{AGM_MESSAGES_JSON}</script>
+<script>
+(function () {
+	'use strict';
+
+	var i18n = {};
+	try { i18n = JSON.parse(document.getElementById('agm-i18n').textContent); } catch (e) { i18n = {}; }
+
+	// True when the page is opened from the settings panel
+	var preview = document.body.getAttribute('data-agm-preview') === '1';
+
+	var root = document.documentElement;
+	var current = root.getAttribute('data-agm-lang') || 'it';
+
+	function applyLang(lang) {
+		if (!i18n[lang]) { return; }
+		current = lang;
+		root.setAttribute('data-agm-lang', lang);
+		root.setAttribute('lang', lang);
+
+		var nodes = document.querySelectorAll('[data-agm-key]');
+		for (var i = 0; i < nodes.length; i++) {
+			var key = nodes[i].getAttribute('data-agm-key');
+			if (i18n[lang][key]) { nodes[i].textContent = i18n[lang][key]; }
+		}
+
+		if (chooser && chooser.value !== lang) { chooser.value = lang; }
+
+		if (typeof window.agmTick === 'function') { window.agmTick(); }
+		// Remember the visitor's own choice, with the moment it was made: a
+		// preference from days ago should not outrank the language of their
+		// account forever. Never remembered while previewing, so the panel
+		// always shows what a first time visitor would get.
+		if (!preview) {
+			try {
+				window.localStorage.setItem('agm_lang', lang + '|' + Date.now());
+			} catch (e) {}
+		}
+	}
+
+	var chooser = document.getElementById('agm-lang-select');
+
+	if (chooser) {
+		// Browsers remember the value of a drop down across reloads and put it
+		// back on their own, which would leave the chooser showing a language
+		// the page is not written in. The page decides, not the browser.
+		if (chooser.value !== current) {
+			chooser.value = current;
+		}
+
+		chooser.addEventListener('change', function () { applyLang(this.value); });
+	}
+
+	// An explicit ?agm_lang= in the address is a deliberate request and must
+	// beat anything remembered from an earlier visit.
+	var asked = /[?&]agm_lang=/.test(window.location.search);
+
+	if (!preview && !asked) {
+		try {
+			var saved = String(window.localStorage.getItem('agm_lang') || '').split('|');
+			var savedLang = saved[0];
+			var savedWhen = parseInt(saved[1], 10) || 0;
+			var DAY = 24 * 60 * 60 * 1000;
+
+			if (savedLang && i18n[savedLang] && savedLang !== current && (Date.now() - savedWhen) < DAY) {
+				applyLang(savedLang);
+			}
+		} catch (e) {}
+	}
+
+	/* Dates in the visitor's own timezone ------------------------------ */
+	function pad2(n) { return (n < 10 ? '0' : '') + n; }
+
+	var stamps = document.querySelectorAll('[data-agm-ts]');
+	for (var s = 0; s < stamps.length; s++) {
+		var ts = parseInt(stamps[s].getAttribute('data-agm-ts'), 10);
+		if (ts > 0) {
+			var when = new Date(ts * 1000);
+			stamps[s].textContent = pad2(when.getDate()) + '/' + pad2(when.getMonth() + 1) + '/' + when.getFullYear() + ' ' + pad2(when.getHours()) + ':' + pad2(when.getMinutes());
+		}
+	}
+
+	/* Countdown ------------------------------------------------------- */
+	var box = document.getElementById('agm-countdown-box');
+	if (box) {
+		var start = parseInt(box.getAttribute('data-agm-start'), 10) || 0;
+		var end = parseInt(box.getAttribute('data-agm-end'), 10) || 0;
+		var serverNow = parseInt(box.getAttribute('data-agm-now'), 10) || 0;
+		var loaded = Date.now();
+		var output = document.getElementById('agm-cd-time');
+		var fill = document.getElementById('agm-bar-fill');
+		var finished = false;
+
+		function unit(key, fallback) {
+			return (i18n[current] && i18n[current][key]) ? i18n[current][key] : fallback;
+		}
+
+		function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+		function label(left) {
+			var d = Math.floor(left / 86400);
+			var h = Math.floor(left % 86400 / 3600);
+			var m = Math.floor(left % 3600 / 60);
+			var s = left % 60;
+
+			if (d > 0) { return d + unit('AGM_PAGE_U_D', 'd') + ' ' + pad(h) + unit('AGM_PAGE_U_H', 'h') + ' ' + pad(m) + unit('AGM_PAGE_U_M', 'm'); }
+			if (h > 0) { return h + unit('AGM_PAGE_U_H', 'h') + ' ' + pad(m) + unit('AGM_PAGE_U_M', 'm') + ' ' + pad(s) + unit('AGM_PAGE_U_S', 's'); }
+			if (m > 0) { return m + unit('AGM_PAGE_U_M', 'm') + ' ' + pad(s) + unit('AGM_PAGE_U_S', 's'); }
+			return s + unit('AGM_PAGE_U_S', 's');
+		}
+
+		function tick() {
+			var now = serverNow + Math.floor((Date.now() - loaded) / 1000);
+			var left = end - now;
+
+			if (left <= 0) {
+				output.textContent = '0' + unit('AGM_PAGE_U_S', 's');
+				if (fill) { fill.style.width = '100%'; }
+				if (!finished) {
+					finished = true;
+					var head = box.querySelector('[data-agm-key="AGM_PAGE_REMAINING"]');
+					if (head) { head.setAttribute('data-agm-key', 'AGM_PAGE_ENDED'); head.textContent = unit('AGM_PAGE_ENDED', ''); }
+
+					// Maintenance is over: go back to the board itself.
+					var home = box.getAttribute('data-agm-home');
+					window.setTimeout(function () {
+						window.location.href = home ? home : '/';
+					}, 3000);
+				}
+				return;
+			}
+
+			output.textContent = label(left);
+
+			if (fill && start && end > start) {
+				var done = Math.max(0, Math.min(100, (now - start) / (end - start) * 100));
+				fill.style.width = done.toFixed(1) + '%';
+			}
+
+			window.setTimeout(tick, 1000);
+		}
+
+		window.agmTick = function () { if (!finished) { output.textContent = label(Math.max(0, end - (serverNow + Math.floor((Date.now() - loaded) / 1000)))); } };
+		tick();
+	}
+
+	/* Particles ------------------------------------------------------- */
+	var canvas = document.getElementById('agm-particles');
+	if (canvas && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+		var ctx = canvas.getContext('2d');
+		var dots = [];
+		var width = 0, height = 0;
+
+		function resize() {
+			width = canvas.width = window.innerWidth;
+			height = canvas.height = window.innerHeight;
+			var count = Math.min(140, Math.round(width * height / 12000));
+			dots = [];
+			for (var i = 0; i < count; i++) {
+				dots.push({
+					x: Math.random() * width,
+					y: Math.random() * height,
+					r: Math.random() * 1.8 + 0.4,
+					vx: (Math.random() - 0.5) * 0.25,
+					vy: Math.random() * 0.45 + 0.08,
+					a: Math.random() * 0.5 + 0.2
+				});
+			}
+		}
+
+		function draw() {
+			ctx.clearRect(0, 0, width, height);
+			for (var i = 0; i < dots.length; i++) {
+				var d = dots[i];
+				d.x += d.vx;
+				d.y += d.vy;
+				if (d.y - d.r > height) { d.y = -d.r; d.x = Math.random() * width; }
+				if (d.x < -5) { d.x = width + 5; }
+				if (d.x > width + 5) { d.x = -5; }
+				ctx.beginPath();
+				ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+				ctx.fillStyle = 'rgba(255,255,255,' + d.a + ')';
+				ctx.fill();
+			}
+			window.requestAnimationFrame(draw);
+		}
+
+		var resizeTimer;
+		window.addEventListener('resize', function () {
+			window.clearTimeout(resizeTimer);
+			resizeTimer = window.setTimeout(resize, 200);
+		});
+		resize();
+		draw();
+	}
+
+	/* Automatic refresh ----------------------------------------------- */
+	var refresh = {AGM_AUTO_REFRESH};
+	if (refresh > 0) {
+		window.setTimeout(function () {
+			// Cache buster: without it a cached copy of this page can keep
+			// showing after maintenance has been switched off.
+			var url = window.location.href.split('#')[0].replace(/([?&])_agm=\d+/, '$1');
+			url = url.replace(/[?&]$/, '');
+			window.location.replace(url + (url.indexOf('?') === -1 ? '?' : '&') + '_agm=' + Date.now());
+		}, refresh * 1000);
+	}
+}());
+</script>
+</body>
+</html>
