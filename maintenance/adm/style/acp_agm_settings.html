@@ -1,0 +1,550 @@
+<!-- INCLUDE overall_header.html -->
+
+<!--
+	Forum Maintenance Mode - phpBB extension
+	Author:    Salvo Cortesiano
+	Copyright: (c) 2026-08-11 20:00 CEST Salvo Cortesiano
+	Forum:     https://netshadows.de/ombra/
+	License:   GNU General Public License, version 2 (GPL-2.0)
+-->
+
+<a id="maincontent"></a>
+
+<h1>{L_ACP_AGM_SETTINGS}</h1>
+<p>{L_ACP_AGM_SETTINGS_EXPLAIN}</p>
+
+<!-- IF S_ERROR -->
+	<div class="errorbox">
+		<h3>{L_WARNING}</h3>
+		<p>{ERROR_MSG}</p>
+	</div>
+<!-- ENDIF -->
+
+<style>
+.agm-status { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 6px; }
+.agm-status div { flex: 1 1 200px; border: 1px solid #d5d9de; border-radius: 6px; padding: 12px 14px; background: #f7f9fb; }
+.agm-status span { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .6px; color: #6b7785; margin-bottom: 4px; }
+.agm-status strong { font-size: 16px; }
+.agm-check { margin: 10px 0 4px; padding: 10px 14px; border: 1px solid #d5d9de; border-radius: 6px; background: #f7f9fb; max-width: 900px; }
+.agm-check ul { margin: 6px 0; padding-left: 18px; }
+.agm-check li { margin: 2px 0; }
+.agm-check .agm-yes { color: #1f9d55; }
+.agm-check .agm-no { color: #c0392b; }
+.agm-check > span { font-size: 11px; color: #6b7785; }
+.agm-status .agm-hint { display: block; margin-top: 4px; font-size: 11px; font-style: normal; color: #6b7785; line-height: 1.4; }
+.agm-on { color: #c0392b; }
+.agm-off { color: #1f9d55; }
+.agm-swatch { display: inline-flex; align-items: center; gap: 8px; }
+.agm-swatch input[type="color"] { width: 42px; height: 28px; padding: 0; border: 1px solid #c3ccd6; border-radius: 4px; background: none; cursor: pointer; }
+.agm-swatch input[type="text"] { width: 110px; font-family: monospace; }
+.agm-alpha { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; font-size: 11px; color: #536482; }
+.agm-alpha input[type="range"] { width: 90px; }
+.agm-alpha b { font-family: monospace; min-width: 34px; }
+.agm-warn { margin-top: 10px; padding: 10px 14px; border: 1px solid #c0392b; border-left-width: 5px; border-radius: 4px; background: #fdecea; color: #7b241c; max-width: 900px; }
+.agm-lang-block { border: 1px solid #d5d9de; border-radius: 6px; margin: 0 0 8px; background: #fbfcfd; }
+.agm-lang-block > summary { cursor: pointer; padding: 10px 14px; font-weight: bold; }
+.agm-lang-block[open] > summary { border-bottom: 1px solid #e3e7ec; }
+.agm-lang-block dl { margin: 0; }
+.agm-lang-code { font-weight: normal; color: #6b7785; font-size: 11px; letter-spacing: 1px; }
+.agm-notice-preview { border: 1px solid #e0a800; border-left-width: 5px; border-radius: 4px; background: #fff8e1; color: #5c4600; padding: 10px 14px; max-width: 720px; }
+.agm-preview-frame { width: 100%; height: 420px; border: 1px solid #c3ccd6; border-radius: 6px; margin-top: 10px; display: none; }
+</style>
+
+<form id="agm_settings" method="post" action="{U_ACTION}">
+
+<fieldset>
+	<legend>{L_AGM_CURRENT_STATUS}</legend>
+	<div class="agm-status">
+		<div>
+			<span>{L_AGM_STATUS}</span>
+			<strong class="<!-- IF AGM_IS_ACTIVE -->agm-on<!-- ELSE -->agm-off<!-- ENDIF -->"><!-- IF AGM_IS_ACTIVE -->{L_AGM_STATUS_ACTIVE}<!-- ELSE -->{L_AGM_STATUS_INACTIVE}<!-- ENDIF --></strong>
+			<!-- IF not AGM_IS_ACTIVE and AGM_IS_ENABLED --><em class="agm-hint">{L_AGM_STATUS_WAITING}</em><!-- ENDIF -->
+			<!-- IF AGM_IS_ACTIVE --><em class="agm-hint">{L_AGM_STATUS_SHOWING}</em><!-- ENDIF -->
+		</div>
+		<div>
+			<span>{L_AGM_BOARD_DISABLE_STATE}</span>
+			<strong class="<!-- IF AGM_BOARD_DISABLED -->agm-on<!-- ELSE -->agm-off<!-- ENDIF -->"><!-- IF AGM_BOARD_DISABLED -->{L_AGM_BOARD_OFF}<!-- ELSE -->{L_AGM_BOARD_ON}<!-- ENDIF --></strong>
+		</div>
+		<div>
+			<span>{L_AGM_START_TIME}</span>
+			<strong data-agm-ts="{AGM_START_TS}">{AGM_START_HUMAN}</strong>
+		</div>
+		<div>
+			<span>{L_AGM_ESTIMATED_DURATION}</span>
+			<strong>{AGM_DURATION}</strong>
+		</div>
+	</div>
+	<div class="agm-check">
+		<strong>{L_AGM_PAGE_CHECK}</strong>
+		<ul>
+			<li class="<!-- IF S_AGM_CHECK_COUNTDOWN -->agm-yes<!-- ELSE -->agm-no<!-- ENDIF -->">{L_AGM_CHECK_COUNTDOWN}</li>
+			<li class="<!-- IF S_AGM_CHECK_DATES -->agm-yes<!-- ELSE -->agm-no<!-- ENDIF -->">{L_AGM_CHECK_DATES}</li>
+			<li class="<!-- IF S_AGM_CHECK_PROGRESS -->agm-yes<!-- ELSE -->agm-no<!-- ENDIF -->">{L_AGM_CHECK_PROGRESS}</li>
+			<li class="<!-- IF S_AGM_CHECK_CONTACT -->agm-yes<!-- ELSE -->agm-no<!-- ENDIF -->">{L_AGM_CHECK_CONTACT}</li>
+		</ul>
+		<span>{L_AGM_PAGE_CHECK_EXPLAIN}</span>
+	</div>
+
+	<p class="submit-buttons" style="text-align: left; border: 0; background: none;">
+		<input class="button1" type="submit" name="agm_toggle" value="<!-- IF AGM_IS_ENABLED -->{L_AGM_TURN_OFF}<!-- ELSE -->{L_AGM_TURN_ON}<!-- ENDIF -->" />
+		<a class="button2" href="{U_AGM_PREVIEW}" target="_blank" rel="noopener">{L_AGM_PREVIEW}</a>
+		<input class="button2" type="button" id="agm-preview-inline" value="{L_AGM_PREVIEW_INLINE}" data-url="{U_AGM_PREVIEW}" />
+		<!-- IF AGM_BOARD_STUCK --><input class="button1" type="submit" name="agm_reopen" value="{L_AGM_REOPEN_BOARD}" /><!-- ENDIF -->
+	</p>
+	<!-- IF AGM_BOARD_STUCK -->
+	<div class="agm-warn">{L_AGM_BOARD_STUCK_WARN}</div>
+	<!-- ENDIF -->
+	<iframe id="agm-preview-frame" class="agm-preview-frame" src="" title="{L_AGM_PREVIEW}"></iframe>
+</fieldset>
+
+<fieldset>
+	<legend>{L_AGM_MODE}</legend>
+	<dl>
+		<dt><label>{L_AGM_ENABLED}</label><br /><span>{L_AGM_ENABLED_EXPLAIN}</span></dt>
+		<dd>
+			<label><input type="radio" class="radio" name="agm_enabled" value="1"<!-- IF AGM_IS_ENABLED --> checked="checked"<!-- ENDIF --> /> {L_AGM_ENABLED_ON}</label>
+			<label><input type="radio" class="radio" name="agm_enabled" value="0"<!-- IF not AGM_IS_ENABLED --> checked="checked"<!-- ENDIF --> /> {L_AGM_ENABLED_OFF}</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_sync_board_disable">{L_AGM_SYNC_BOARD}</label><br /><span>{L_AGM_SYNC_BOARD_EXPLAIN}</span></dt>
+		<dd><input type="checkbox" class="checkbox" id="agm_sync_board_disable" name="agm_sync_board_disable" value="1"<!-- IF AGM_SYNC_BOARD --> checked="checked"<!-- ENDIF --> /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_show_to_admins">{L_AGM_SHOW_TO_ADMINS}</label><br /><span>{L_AGM_SHOW_TO_ADMINS_EXPLAIN}</span></dt>
+		<dd><input type="checkbox" class="checkbox" id="agm_show_to_admins" name="agm_show_to_admins" value="1"<!-- IF AGM_SHOW_TO_ADMINS --> checked="checked"<!-- ENDIF --> /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_notice">{L_AGM_NOTICE}</label><br /><span>{L_AGM_NOTICE_EXPLAIN}</span></dt>
+		<dd><input type="checkbox" class="checkbox" id="agm_notice" name="agm_notice" value="1"<!-- IF AGM_NOTICE_ON --> checked="checked"<!-- ENDIF --> /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_notice_days">{L_AGM_NOTICE_DAYS}</label><br /><span>{L_AGM_NOTICE_DAYS_EXPLAIN}</span></dt>
+		<dd><input type="number" id="agm_notice_days" name="agm_notice_days" min="0" max="365" size="4" value="{AGM_NOTICE_DAYS}" /> {L_AGM_NOTICE_DAYS_UNIT}</dd>
+	</dl>
+	<!-- IF AGM_NOTICE_PREVIEW -->
+	<dl>
+		<dt><label>{L_AGM_NOTICE_NOW}</label><br /><span>{L_AGM_NOTICE_NOW_EXPLAIN}</span></dt>
+		<dd><div class="agm-notice-preview">{AGM_NOTICE_PREVIEW}</div></dd>
+	</dl>
+	<!-- ENDIF -->
+	<dl>
+		<dt><label for="agm_use_schedule">{L_AGM_USE_SCHEDULE}</label><br /><span>{L_AGM_USE_SCHEDULE_EXPLAIN}</span></dt>
+		<dd><input type="checkbox" class="checkbox" id="agm_use_schedule" name="agm_use_schedule" value="1"<!-- IF AGM_USE_SCHEDULE --> checked="checked"<!-- ENDIF --> /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_auto_off">{L_AGM_AUTO_OFF}</label><br /><span>{L_AGM_AUTO_OFF_EXPLAIN}</span></dt>
+		<dd><input type="checkbox" class="checkbox" id="agm_auto_off" name="agm_auto_off" value="1"<!-- IF AGM_AUTO_OFF --> checked="checked"<!-- ENDIF --> /></dd>
+	</dl>
+</fieldset>
+
+<fieldset>
+	<legend>{L_AGM_PERIOD}</legend>
+	<dl>
+		<dt><label for="agm_start">{L_AGM_DATE_START}</label><br /><span>{L_AGM_DATE_START_EXPLAIN}</span></dt>
+		<dd><input type="datetime-local" id="agm_start" name="agm_start" value="{AGM_START}" data-ts="{AGM_START_TS}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_end">{L_AGM_DATE_END}</label><br /><span>{L_AGM_DATE_END_EXPLAIN}</span></dt>
+		<dd><input type="datetime-local" id="agm_end" name="agm_end" value="{AGM_END}" data-ts="{AGM_END_TS}" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_TOOLS}</label></dt>
+		<dd>
+			<input class="button2" type="button" id="agm-now" value="{L_AGM_SET_NOW}" />
+			<input class="button2" type="button" id="agm-plus1" value="{L_AGM_PLUS_ONE_HOUR}" />
+			<input class="button2" type="button" id="agm-clear" value="{L_AGM_CLEAR_DATES}" />
+			<span id="agm-duration-live" style="margin-left: 10px;"></span>
+		</dd>
+	</dl>
+</fieldset>
+
+<fieldset>
+	<legend>{L_AGM_APPEARANCE}</legend>
+	<dl>
+		<dt><label for="agm_show_gear">{L_AGM_SHOW_GEAR}</label><br /><span>{L_AGM_SHOW_GEAR_EXPLAIN}</span></dt>
+		<dd><input type="checkbox" class="checkbox" id="agm_show_gear" name="agm_show_gear" value="1"<!-- IF AGM_SHOW_GEAR --> checked="checked"<!-- ENDIF --> /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_spin_gear">{L_AGM_SPIN_GEAR}</label><br /><span>{L_AGM_SPIN_GEAR_EXPLAIN}</span></dt>
+		<dd><input type="checkbox" class="checkbox" id="agm_spin_gear" name="agm_spin_gear" value="1"<!-- IF AGM_SPIN_GEAR --> checked="checked"<!-- ENDIF --> /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_particles">{L_AGM_PARTICLES}</label><br /><span>{L_AGM_PARTICLES_EXPLAIN}</span></dt>
+		<dd><input type="checkbox" class="checkbox" id="agm_particles" name="agm_particles" value="1"<!-- IF AGM_PARTICLES --> checked="checked"<!-- ENDIF --> /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_particle_style">{L_AGM_PARTICLE_STYLE}</label><br /><span>{L_AGM_PARTICLE_STYLE_EXPLAIN}</span></dt>
+		<dd><select id="agm_particle_style" name="agm_particle_style">
+			<option value="snow"<!-- IF AGM_STYLE_SNOW --> selected="selected"<!-- ENDIF -->>{L_AGM_PARTICLE_SNOW}</option>
+			<option value="stars"<!-- IF AGM_STYLE_STARS --> selected="selected"<!-- ENDIF -->>{L_AGM_PARTICLE_STARS}</option>
+			<option value="both"<!-- IF AGM_STYLE_BOTH --> selected="selected"<!-- ENDIF -->>{L_AGM_PARTICLE_BOTH}</option>
+		</select></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_countdown">{L_AGM_COUNTDOWN}</label><br /><span>{L_AGM_COUNTDOWN_EXPLAIN}</span></dt>
+		<dd><input type="checkbox" class="checkbox" id="agm_countdown" name="agm_countdown" value="1"<!-- IF AGM_COUNTDOWN --> checked="checked"<!-- ENDIF --> /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_show_dates">{L_AGM_SHOW_DATES}</label><br /><span>{L_AGM_SHOW_DATES_EXPLAIN}</span></dt>
+		<dd><input type="checkbox" class="checkbox" id="agm_show_dates" name="agm_show_dates" value="1"<!-- IF AGM_SHOW_DATES --> checked="checked"<!-- ENDIF --> /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_progress_bar">{L_AGM_PROGRESS_BAR}</label><br /><span>{L_AGM_PROGRESS_BAR_EXPLAIN}</span></dt>
+		<dd><input type="checkbox" class="checkbox" id="agm_progress_bar" name="agm_progress_bar" value="1"<!-- IF AGM_PROGRESS_BAR --> checked="checked"<!-- ENDIF --> /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_lang_switcher">{L_AGM_LANG_SWITCHER}</label><br /><span>{L_AGM_LANG_SWITCHER_EXPLAIN}</span></dt>
+		<dd><input type="checkbox" class="checkbox" id="agm_lang_switcher" name="agm_lang_switcher" value="1"<!-- IF AGM_LANG_SWITCHER --> checked="checked"<!-- ENDIF --> /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_show_admin_link">{L_AGM_ADMIN_LINK}</label><br /><span>{L_AGM_ADMIN_LINK_EXPLAIN}</span></dt>
+		<dd><input type="checkbox" class="checkbox" id="agm_show_admin_link" name="agm_show_admin_link" value="1"<!-- IF AGM_SHOW_ADMIN_LINK --> checked="checked"<!-- ENDIF --> /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_default_lang">{L_AGM_DEFAULT_LANG}</label><br /><span>{L_AGM_DEFAULT_LANG_EXPLAIN}</span></dt>
+		<dd><select id="agm_default_lang" name="agm_default_lang">
+			<!-- BEGIN agm_lang_option -->
+				<option value="{agm_lang_option.ISO}"<!-- IF agm_lang_option.S_SELECTED --> selected="selected"<!-- ENDIF -->>{agm_lang_option.NAME}</option>
+			<!-- END agm_lang_option -->
+		</select></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_refresh">{L_AGM_REFRESH}</label><br /><span>{L_AGM_REFRESH_EXPLAIN}</span></dt>
+		<dd><input type="number" id="agm_refresh" name="agm_refresh" min="0" max="3600" size="5" value="{AGM_REFRESH}" /> {L_AGM_SECONDS}</dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_logo_url">{L_AGM_LOGO_URL}</label><br /><span>{L_AGM_LOGO_URL_EXPLAIN}</span></dt>
+		<dd><input type="text" id="agm_logo_url" name="agm_logo_url" size="50" maxlength="255" value="{AGM_LOGO_URL}" /></dd>
+	</dl>
+</fieldset>
+
+<fieldset>
+	<legend>{L_AGM_PALETTE}</legend>
+	<dl>
+		<dt><label>{L_AGM_C_BG_START}</label></dt>
+		<dd class="agm-swatch"><input type="color" data-agm-sync="agm_color_bg_start" value="{AGM_C_BG_START}" /><input type="text" id="agm_color_bg_start" name="agm_color_bg_start" value="{AGM_C_BG_START}" maxlength="9" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_C_BG_END}</label></dt>
+		<dd class="agm-swatch"><input type="color" data-agm-sync="agm_color_bg_end" value="{AGM_C_BG_END}" /><input type="text" id="agm_color_bg_end" name="agm_color_bg_end" value="{AGM_C_BG_END}" maxlength="9" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_C_TOPBAR}</label></dt>
+		<dd class="agm-swatch"><input type="color" data-agm-sync="agm_color_topbar" value="{AGM_C_TOPBAR}" /><input type="text" id="agm_color_topbar" name="agm_color_topbar" value="{AGM_C_TOPBAR}" maxlength="9" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_C_ACCENT}</label></dt>
+		<dd class="agm-swatch"><input type="color" data-agm-sync="agm_color_accent" value="{AGM_C_ACCENT}" /><input type="text" id="agm_color_accent" name="agm_color_accent" value="{AGM_C_ACCENT}" maxlength="9" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_C_TEXT}</label></dt>
+		<dd class="agm-swatch"><input type="color" data-agm-sync="agm_color_text" value="{AGM_C_TEXT}" /><input type="text" id="agm_color_text" name="agm_color_text" value="{AGM_C_TEXT}" maxlength="9" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_C_MUTED}</label></dt>
+		<dd class="agm-swatch"><input type="color" data-agm-sync="agm_color_muted" value="{AGM_C_MUTED}" /><input type="text" id="agm_color_muted" name="agm_color_muted" value="{AGM_C_MUTED}" maxlength="9" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_C_CD_FROM}</label><br /><span>{L_AGM_C_CD_EXPLAIN}</span></dt>
+		<dd class="agm-swatch"><input type="color" data-agm-sync="agm_color_cd_from" value="{AGM_C_CD_FROM_RGB}" /><input type="text" id="agm_color_cd_from" name="agm_color_cd_from" value="{AGM_C_CD_FROM}" maxlength="9" /><label class="agm-alpha">{L_AGM_OPACITY} <input type="range" data-agm-alpha="agm_color_cd_from" min="0" max="255" step="1" value="{AGM_C_CD_FROM_A}" /><b data-agm-alpha-out="agm_color_cd_from"></b></label></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_C_CD_TO}</label></dt>
+		<dd class="agm-swatch"><input type="color" data-agm-sync="agm_color_cd_to" value="{AGM_C_CD_TO_RGB}" /><input type="text" id="agm_color_cd_to" name="agm_color_cd_to" value="{AGM_C_CD_TO}" maxlength="9" /><label class="agm-alpha">{L_AGM_OPACITY} <input type="range" data-agm-alpha="agm_color_cd_to" min="0" max="255" step="1" value="{AGM_C_CD_TO_A}" /><b data-agm-alpha-out="agm_color_cd_to"></b></label></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_C_PROG_A}</label></dt>
+		<dd class="agm-swatch"><input type="color" data-agm-sync="agm_color_prog_a" value="{AGM_C_PROG_A}" /><input type="text" id="agm_color_prog_a" name="agm_color_prog_a" value="{AGM_C_PROG_A}" maxlength="9" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_C_PROG_B}</label></dt>
+		<dd class="agm-swatch"><input type="color" data-agm-sync="agm_color_prog_b" value="{AGM_C_PROG_B}" /><input type="text" id="agm_color_prog_b" name="agm_color_prog_b" value="{AGM_C_PROG_B}" maxlength="9" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_C_CARD}</label><br /><span>{L_AGM_C_CARD_EXPLAIN}</span></dt>
+		<dd class="agm-swatch"><input type="color" data-agm-sync="agm_color_card" value="{AGM_C_CARD_RGB}" /><input type="text" id="agm_color_card" name="agm_color_card" value="{AGM_C_CARD}" maxlength="9" /><label class="agm-alpha">{L_AGM_OPACITY} <input type="range" data-agm-alpha="agm_color_card" min="0" max="255" step="1" value="{AGM_C_CARD_A}" /><b data-agm-alpha-out="agm_color_card"></b></label></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_RESET_COLORS}</label><br /><span>{L_AGM_RESET_COLORS_EXPLAIN}</span></dt>
+		<dd><input class="button2" type="button" id="agm-reset-colors" value="{L_AGM_RESET_COLORS_BTN}" /></dd>
+	</dl>
+</fieldset>
+
+<fieldset>
+	<legend>{L_AGM_CONTACTS}</legend>
+	<dl>
+		<dt><label for="agm_contact_email">{L_AGM_CONTACT_EMAIL}</label></dt>
+		<dd><input type="text" id="agm_contact_email" name="agm_contact_email" size="40" maxlength="255" value="{AGM_CONTACT_EMAIL}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_contact_phone">{L_AGM_CONTACT_PHONE}</label></dt>
+		<dd><input type="text" id="agm_contact_phone" name="agm_contact_phone" size="40" maxlength="255" value="{AGM_CONTACT_PHONE}" /></dd>
+	</dl>
+</fieldset>
+
+<fieldset>
+	<legend>{L_AGM_MESSAGES}</legend>
+	<p>{L_AGM_MESSAGES_EXPLAIN}</p>
+
+	<dl>
+		<dt><label for="agm_edit_lang">{L_AGM_EDIT_LANG}</label><br /><span>{L_AGM_EDIT_LANG_EXPLAIN}</span></dt>
+		<dd>
+			<select id="agm_edit_lang" name="agm_edit_lang">
+				<!-- BEGIN agm_lang_option -->
+					<option value="{agm_lang_option.ISO}"<!-- IF agm_lang_option.S_EDITING --> selected="selected"<!-- ENDIF -->>{agm_lang_option.NAME}</option>
+				<!-- END agm_lang_option -->
+			</select>
+			<input class="button2" type="submit" name="agm_load_lang" value="{L_AGM_LOAD_LANG}" />
+		</dd>
+	</dl>
+
+	<dl>
+		<dt><label for="agm_text_title">{L_AGM_M_TITLE}</label></dt>
+		<dd><input type="text" id="agm_text_title" name="agm_text_title" size="60" maxlength="255" value="{AGM_TEXT_TITLE}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_text_subtitle">{L_AGM_M_SUBTITLE}</label></dt>
+		<dd><input type="text" id="agm_text_subtitle" name="agm_text_subtitle" size="60" maxlength="255" value="{AGM_TEXT_SUBTITLE}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_text_description">{L_AGM_M_DESCRIPTION}</label></dt>
+		<dd><textarea id="agm_text_description" name="agm_text_description" rows="3" cols="60">{AGM_TEXT_DESCRIPTION}</textarea></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_text_footer">{L_AGM_M_FOOTER}</label></dt>
+		<dd><input type="text" id="agm_text_footer" name="agm_text_footer" size="60" maxlength="255" value="{AGM_TEXT_FOOTER}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="agm_text_notice">{L_AGM_M_NOTICE}</label><br /><span>{L_AGM_M_NOTICE_EXPLAIN}</span></dt>
+		<dd><textarea id="agm_text_notice" name="agm_text_notice" rows="3" cols="60">{AGM_TEXT_NOTICE}</textarea></dd>
+	</dl>
+</fieldset>
+
+<fieldset>
+	<legend>{L_AGM_LOG}</legend>
+	<dl>
+		<dt><label>{L_AGM_LAST_ON}</label></dt>
+		<dd><strong>{AGM_LAST_ON}</strong></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_LAST_OFF}</label></dt>
+		<dd><strong>{AGM_LAST_OFF}</strong></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_AGM_TOTAL_ON}</label></dt>
+		<dd><strong>{AGM_TOTAL_ON}</strong></dd>
+	</dl>
+</fieldset>
+
+<fieldset class="submit-buttons">
+	<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />
+	<input class="button2" type="reset" value="{L_RESET}" name="reset" />
+	<input type="hidden" id="agm_ts_mode" name="agm_ts_mode" value="0" />
+	<input type="hidden" id="agm_start_ts" name="agm_start_ts" value="{AGM_START_TS}" />
+	<input type="hidden" id="agm_end_ts" name="agm_end_ts" value="{AGM_END_TS}" />
+	{S_FORM_TOKEN}
+</fieldset>
+</form>
+
+<script>
+(function () {
+	'use strict';
+
+	function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+	function localValue(date) {
+		return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()) + 'T' + pad(date.getHours()) + ':' + pad(date.getMinutes());
+	}
+
+	var start = document.getElementById('agm_start');
+	var end = document.getElementById('agm_end');
+	var out = document.getElementById('agm-duration-live');
+	var startTs = document.getElementById('agm_start_ts');
+	var endTs = document.getElementById('agm_end_ts');
+	var tsMode = document.getElementById('agm_ts_mode');
+
+	// Show the stored moment in the browser timezone, and post it back as a
+	// timestamp, so the saved time is the one shown on screen.
+	function fillFromTs(field) {
+		var ts = parseInt(field.getAttribute('data-ts'), 10);
+		field.value = (ts > 0) ? localValue(new Date(ts * 1000)) : '';
+	}
+
+	function syncHidden() {
+		startTs.value = start.value ? Math.floor(new Date(start.value).getTime() / 1000) : 0;
+		endTs.value = end.value ? Math.floor(new Date(end.value).getTime() / 1000) : 0;
+	}
+
+	fillFromTs(start);
+	fillFromTs(end);
+	tsMode.value = '1';
+	syncHidden();
+
+	document.getElementById('agm_settings').addEventListener('submit', syncHidden);
+
+	var stamps = document.querySelectorAll('[data-agm-ts]');
+	for (var t = 0; t < stamps.length; t++) {
+		var value = parseInt(stamps[t].getAttribute('data-agm-ts'), 10);
+		if (value > 0) {
+			stamps[t].textContent = new Date(value * 1000).toLocaleString();
+		}
+	}
+
+	function refreshDuration() {
+		if (!out) { return; }
+		if (!start.value || !end.value) { out.textContent = ''; return; }
+		var diff = (new Date(end.value) - new Date(start.value)) / 1000;
+		if (isNaN(diff) || diff <= 0) { out.textContent = '\u2014'; return; }
+		out.textContent = Math.floor(diff / 86400) + 'd ' + Math.floor(diff % 86400 / 3600) + 'h ' + Math.floor(diff % 3600 / 60) + 'm';
+	}
+
+	document.getElementById('agm-now').addEventListener('click', function () {
+		start.value = localValue(new Date());
+		refreshDuration();
+		syncHidden();
+	});
+
+	document.getElementById('agm-plus1').addEventListener('click', function () {
+		var base = start.value ? new Date(start.value) : new Date();
+		if (!start.value) { start.value = localValue(base); }
+		end.value = localValue(new Date(base.getTime() + 3600000));
+		refreshDuration();
+		syncHidden();
+	});
+
+	document.getElementById('agm-clear').addEventListener('click', function () {
+		start.value = end.value = '';
+		refreshDuration();
+		syncHidden();
+	});
+
+	start.addEventListener('change', function () { refreshDuration(); syncHidden(); });
+	end.addEventListener('change', function () { refreshDuration(); syncHidden(); });
+	refreshDuration();
+
+	// Colours may be 6 digits (#rrggbb) or 8 (#rrggbbaa, with transparency).
+	// The swatches and sliders already arrive with the right values from the
+	// server, so this code only reacts to edits and never rewrites them at load.
+	function isHexDigits(str) {
+		for (var c = 0; c < str.length; c++) {
+			if ('0123456789abcdefABCDEF'.indexOf(str.charAt(c)) === -1) { return false; }
+		}
+		return str.length > 0;
+	}
+
+	// NOTE: no regular expressions here on purpose. phpBB's template lexer
+	// rewrites brace quantifiers as Twig variables, silently breaking them
+	// inside template files, so the parsing is done by hand.
+	function rgbPart(value) {
+		var v = String(value).replace(/^\s+|\s+$/g, '');
+		if (v.charAt(0) !== '#') { return null; }
+		if (v.length !== 7 && v.length !== 9) { return null; }
+		return isHexDigits(v.substring(1, 7)) ? v.substring(0, 7) : null;
+	}
+
+	function alphaPart(value) {
+		var v = String(value).replace(/^\s+|\s+$/g, '');
+		if (v.charAt(0) !== '#' || v.length !== 9) { return null; }
+		if (!isHexDigits(v.substring(1, 9))) { return null; }
+		return parseInt(v.substring(7, 9), 16);
+	}
+
+	function hex2(n) {
+		var h = Math.max(0, Math.min(255, n)).toString(16);
+		return (h.length < 2 ? '0' : '') + h;
+	}
+
+	// Each field registers how to refresh its own swatch and slider, so the
+	// reset button can call them directly instead of firing events.
+	var syncers = {};
+
+	var pickers = document.querySelectorAll('input[data-agm-sync]');
+	for (var i = 0; i < pickers.length; i++) {
+		(function (picker) {
+			var id = picker.getAttribute('data-agm-sync');
+			var field = document.getElementById(id);
+
+			if (!field) { return; }
+
+			var slider = document.querySelector('[data-agm-alpha="' + id + '"]');
+			var readout = document.querySelector('[data-agm-alpha-out="' + id + '"]');
+
+			function showAlpha() {
+				if (readout && slider) {
+					readout.textContent = Math.round(slider.value / 255 * 100) + '%';
+				}
+			}
+
+			// Picker or slider moved: rebuild the text field
+			function toField() {
+				field.value = slider ? picker.value + hex2(parseInt(slider.value, 10)) : picker.value;
+				showAlpha();
+			}
+
+			// Text field edited by hand: follow it, but only when it parses
+			function fromField() {
+				var rgb = rgbPart(field.value);
+				var alpha = alphaPart(field.value);
+
+				if (rgb) { picker.value = rgb; }
+
+				if (slider && rgb) { slider.value = (alpha === null) ? 255 : alpha; }
+
+				showAlpha();
+			}
+
+			picker.addEventListener('input', toField);
+			if (slider) { slider.addEventListener('input', toField); }
+			field.addEventListener('input', fromField);
+			field.addEventListener('change', fromField);
+
+			syncers[id] = fromField;
+			showAlpha();
+		}(pickers[i]));
+	}
+
+	// Restore every colour to the value the extension ships with.
+	var defaults = {
+		agm_color_bg_start: '#0f1c3f',
+		agm_color_bg_end: '#1d4ed8',
+		agm_color_topbar: '#0b1120',
+		agm_color_accent: '#3b82f6',
+		agm_color_text: '#f8fafc',
+		agm_color_muted: '#c7d2fe',
+		agm_color_cd_from: '#2b3f8fcc',
+		agm_color_cd_to: '#5b3a8fcc',
+		agm_color_prog_a: '#60a5fa',
+		agm_color_prog_b: '#c084fc',
+		agm_color_card: '#16255180'
+	};
+
+	document.getElementById('agm-reset-colors').addEventListener('click', function () {
+		for (var key in defaults) {
+			if (!defaults.hasOwnProperty(key)) { continue; }
+
+			var field = document.getElementById(key);
+			if (!field) { continue; }
+
+			field.value = defaults[key];
+
+			// Refresh the swatch and the opacity slider next to it
+			if (typeof syncers[key] === 'function') { syncers[key](); }
+		}
+	});
+
+	var toggle = document.getElementById('agm-preview-inline');
+	var frame = document.getElementById('agm-preview-frame');
+	toggle.addEventListener('click', function () {
+		if (frame.style.display === 'block') {
+			frame.style.display = 'none';
+			frame.src = '';
+		} else {
+			frame.src = toggle.getAttribute('data-url');
+			frame.style.display = 'block';
+		}
+	});
+}());
+</script>
+
+<!-- INCLUDE overall_footer.html -->
